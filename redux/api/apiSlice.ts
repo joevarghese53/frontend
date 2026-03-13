@@ -1,0 +1,106 @@
+// redux/api/apiSlice.ts
+import {
+  fetchBaseQuery,
+  createApi,
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query/react"
+import { BASE_URL, USERS_URL } from "../constants"
+import { logout, setAccessToken } from "../state/auth/authSlice"
+import { RootState } from "../store"
+
+type RefreshResponse = {
+  accessToken: string
+}
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: BASE_URL,
+  credentials: "include", // Send refreshToken cookie
+  prepareHeaders: (headers, { getState }) => {
+    const token = (getState() as RootState).auth.userInfo?.accessToken
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`)
+    }
+    return headers
+  },
+})
+
+const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions)
+
+  // If access token expired (unauthorized)
+  if (result?.error?.status === 401) {
+    const requestedUrl = typeof args === "string" ? args : (args?.url ?? "")
+
+    const isAuthEndpoint =
+      requestedUrl.includes("/login") ||
+      requestedUrl.includes("/refresh-token") ||
+      requestedUrl.includes("/logout") ||
+      requestedUrl.includes("/register") ||
+      requestedUrl.includes("/initiate-registration") ||
+      requestedUrl.includes("/resetPasswordLink") ||
+      requestedUrl.includes("/resetPassword")
+
+    if (isAuthEndpoint) {
+      // Return the original result (401) so the caller can handle it (e.g. show "invalid creds")
+      return result
+    }
+
+    // Attempt refresh token
+    const refreshResult = await baseQuery(
+      {
+        url: `${USERS_URL}/refresh-token`,
+        method: "POST",
+      },
+      api,
+      extraOptions
+    )
+
+    const refreshData = refreshResult.data as RefreshResponse
+
+    if (refreshData?.accessToken) {
+      // Store new access token in Redux
+      api.dispatch(setAccessToken(refreshData.accessToken))
+
+      // Retry original request
+      result = await baseQuery(args, api, extraOptions)
+    } else {
+      // Refresh failed — logout user
+
+      //Clear cookie by calling logout endpoint
+      await baseQuery(
+        {
+          url: `${USERS_URL}/logout`,
+          method: "POST",
+        },
+        api,
+        extraOptions
+      )
+
+      //Clear redux state and local storage
+      api.dispatch(logout())
+    }
+  }
+
+  return result
+}
+
+export const apiSlice = createApi({
+  baseQuery: baseQueryWithReauth,
+  tagTypes: [
+    "Products",
+    "Order",
+    "User",
+    "Category",
+    "Cart",
+    "Wishlist",
+    "CProduct",
+    "Tries",
+  ],
+  endpoints: () => ({}),
+})

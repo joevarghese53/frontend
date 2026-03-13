@@ -1,0 +1,13 @@
+.all-products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4vw;
+  margin: 70px 20px;
+}
+
+@media (max-width: 425px) {
+  .all-products {
+    margin-bottom: 20px !important;
+  }
+}
