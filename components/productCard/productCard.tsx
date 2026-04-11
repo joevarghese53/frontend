@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ProductType } from "@/types/productType"
 
-export default function ProductCard({ product, index }: { product: ProductType, index: number }) {
+export default function ProductCard({ product }: { product: ProductType }) {
   return (
     <Card className="w-70 border-none">
       <CardContent className="p-0">

@@ -31,8 +31,8 @@ const AllProducts = () => {
   }
   return (
     <div className="all-products">
-      {data?.map((product, index) => (
-        <ProductCard key={product._id} product={product} index={index} />
+      {data?.map((product) => (
+        <ProductCard key={product._id} product={product} />
       ))}
     </div>
   )
