@@ -76,7 +76,8 @@ export default function ImageSlider({ media }: Props) {
                   onClick={() => handleImageClick(page)}
                   aria-hidden={mediaIndex !== index}
                   className="img-slider-img"
-                  priority={index === 0}
+                  priority
+                  loading="eager"
                 />
               ) : (
                 <video

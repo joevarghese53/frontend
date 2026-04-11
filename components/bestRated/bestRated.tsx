@@ -36,8 +36,8 @@ const BestRated = () => {
         Best Rated
       </h1>
       <div className="best-rated">
-        {data?.map((product) => (
-          <ProductCard key={product._id} product={product} />
+        {data?.map((product, index) => (
+          <ProductCard key={product._id} product={product} index={index} />
         ))}
       </div>
     </div>

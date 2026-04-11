@@ -40,7 +40,8 @@ const ImageSwiper = ({ media }: Props) => {
                 sizes="(max-width: 768px) 100vw, 1500px"
                 className="img-swiper-img"
                 onClick={() => handleImageClick(page)}
-                priority={index === 0}
+                priority
+                loading="eager"
               />
             ) : (
               <video
