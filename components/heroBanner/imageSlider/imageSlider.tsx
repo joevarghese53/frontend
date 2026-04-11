@@ -72,7 +72,7 @@ export default function ImageSlider({ media }: Props) {
                   src={url}
                   alt="slides"
                   fill
-                  sizes="100vw"
+                  sizes="(max-width: 1500px) 100vw, 1500px"
                   onClick={() => handleImageClick(page)}
                   aria-hidden={mediaIndex !== index}
                   className="img-slider-img"

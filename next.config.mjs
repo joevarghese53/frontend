@@ -1,8 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ["cdn.flowstateproject.in"],
-    }
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "cdn.flowstateproject.in",
+            },
+        ],
+    },
 }
 
 export default nextConfig

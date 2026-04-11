@@ -37,7 +37,7 @@ const ImageSwiper = ({ media }: Props) => {
                 src={url}
                 alt="slides"
                 fill
-                sizes="100vw"
+                sizes="(max-width: 768px) 100vw, 1500px"
                 className="img-swiper-img"
                 onClick={() => handleImageClick(page)}
                 priority={index === 0}
