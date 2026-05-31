@@ -9,11 +9,11 @@ type ErrorCardProps = {
   onRetry?: () => void
 }
 
-export default function ErrorCard({
+const ErrorCard = ({
   title = "Something went wrong",
   message = "We couldn't load the data. Please try again.",
   onRetry,
-}: ErrorCardProps) {
+}: ErrorCardProps) => {
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
       <AlertTriangle className="h-10 w-10 text-red-500" />
@@ -31,3 +31,6 @@ export default function ErrorCard({
     </div>
   )
 }
+
+export default ErrorCard
+export { ErrorCard }

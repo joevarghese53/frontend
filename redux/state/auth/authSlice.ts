@@ -1,40 +1,34 @@
-// === authSlice.js ===
-import { createSlice } from '@reduxjs/toolkit';
-
-const userInfoFromStorage =
-  typeof window !== 'undefined' && localStorage.getItem('userInfo')
-    ? JSON.parse(localStorage.getItem('userInfo')!)
-    : null;
+import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  userInfo: userInfoFromStorage, // { name, email, accessToken, ... }
-};
+  userInfo: null as null | Record<string, unknown>,
+}
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      state.userInfo = action.payload;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('userInfo', JSON.stringify(action.payload));
+      state.userInfo = action.payload
+      if (typeof window !== "undefined") {
+        localStorage.setItem("userInfo", JSON.stringify(action.payload))
       }
     },
     logout: (state) => {
-      state.userInfo = null;
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('userInfo');
+      state.userInfo = null
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("userInfo")
       }
     },
     setAccessToken: (state, action) => {
-      if (!state.userInfo) return;
-      state.userInfo.accessToken = action.payload;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
+      if (!state.userInfo) return
+      ;(state.userInfo as Record<string, unknown>).accessToken = action.payload
+      if (typeof window !== "undefined") {
+        localStorage.setItem("userInfo", JSON.stringify(state.userInfo))
       }
     },
   },
-});
+})
 
-export const { setCredentials, logout, setAccessToken } = authSlice.actions;
-export default authSlice.reducer;
+export const { setCredentials, logout, setAccessToken } = authSlice.actions
+export default authSlice.reducer

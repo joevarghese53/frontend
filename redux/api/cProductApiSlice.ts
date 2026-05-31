@@ -25,7 +25,6 @@ export const cProductApiSlice = apiSlice.injectEndpoints({
         getCProductDetails: builder.query({
             query: (productId) => `${CPRODUCT_URL}/${productId}`,
             keepUnusedDataFor: 5,
-            invalidatesTags: ["CProduct"],
         }),
     }),
 });
