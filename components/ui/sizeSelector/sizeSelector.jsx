@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import SizeChart from './SizeChart';
+import { useState } from 'react';
+import SizeChart from './sizeChart/sizeChart';
+import './sizeSelector.css';
 
 const SizeSelector = ({ onSizeSelect, category }) => {
     const [showSizeChart, setShowSizeChart] = useState(false);

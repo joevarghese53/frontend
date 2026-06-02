@@ -1,0 +1,47 @@
+.size-selection {
+  margin: 39px 0px;
+}
+
+.size-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.size-selection p {
+  margin-bottom: 10px;
+}
+
+.size-chart-link {
+  font-weight: 600;
+  color: #0076ff;
+  cursor: pointer;
+}
+
+.size-options {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.size-button {
+  padding: 5px 10px;
+  border: 1px solid #324d67;
+  border-radius: 7px;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.size-button:hover {
+  border-color: #f02d34;
+}
+
+.size-button.selected {
+  background-color: #f02d34;
+  /* Change background color when selected */
+  color: #ffffff;
+  /* Change text color when selected */
+  border-color: #f02d34;
+  /* Optional: Change border color when selected */
+}

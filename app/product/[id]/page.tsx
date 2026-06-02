@@ -1,54 +1,138 @@
 "use client"
-import { useState } from "react";
-import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useState, type Dispatch, type FormEvent, type SetStateAction } from "react"
+import Image from "next/image"
+import { useParams } from "next/navigation"
 import { toast } from "sonner"
-import { GoHeart, GoHeartFill } from "react-icons/go";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { GoHeart, GoHeartFill } from "react-icons/go"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux/store"
 import { useGetProductDetailsQuery } from "@/redux/api/productApiSlice"
+import {
+    useAddToWishlistMutation,
+    useRemoveFromWishlistMutation,
+} from "@/redux/api/wishlistApiSlice"
 import { useAddToCartMutation } from "@/redux/api/cartApiSlice"
 import { useCheckItemInWishlistQuery } from "@/redux/api/wishlistApiSlice"
-import { ProductCardSkeleton } from "@/components/productCard/productCardSkeleton/productCardSkeleton";
-import { ErrorCard } from "@/components/errorCard/errorCard";
-import { Rating } from "@/components/ui/rating";
-import { SizeSelector } from "@/components/ui/sizeSelector/SizeSelector";
+import { useCreateReviewMutation } from "@/redux/api/productApiSlice"
+import { ProductCardSkeleton } from "@/components/productCard/productCardSkeleton/productCardSkeleton"
+import { ErrorCard } from "@/components/errorCard/errorCard"
+import { Rating } from "@/components/ui/rating"
+import { SizeSelector } from "@/components/ui/sizeSelector/sizeSelector"
+import type { ProductType, ReviewType } from "@/types/productType"
 import "./page.css"
 
 const ProductPage = () => {
-    const { id } = useParams()
-    const { data: product, isLoading, error, refetch } = useGetProductDetailsQuery(id)
-    const { data: itemExistCheck } = useCheckItemInWishlistQuery(id)
-    const [addToCart] = useAddToCartMutation();
-    const { userInfo } = useSelector((state: RootState) => state.auth);
-    console.log(product)
+    const params = useParams()
+    const productId = typeof params.id === "string" ? params.id : params.id?.[0] ?? ""
+    const { data: product, isLoading, error, refetch } = useGetProductDetailsQuery(
+        productId,
+        { skip: !productId }
+    )
+    const { data: itemExistCheck } = useCheckItemInWishlistQuery(productId, {
+        skip: !productId,
+    })
+    const [addToCart] = useAddToCartMutation()
+    const [addToWishlist] = useAddToWishlistMutation()
+    const [removeFromWishlist] = useRemoveFromWishlistMutation()
+    const [createReview, { isLoading: loadingProductReview }] = useCreateReviewMutation()
+    const { userInfo } = useSelector((state: RootState) => state.auth)
 
-    const [qty, setQty] = useState(1);
-    const [selectedSize, setSelectedSize] = useState(null);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [qty, setQty] = useState(1)
+    const [selectedSize, setSelectedSize] = useState<string | null>(null)
+    const [selectedImage, setSelectedImage] = useState<string | null>(null)
+    const [rating, setRating] = useState(5)
+    const [comment, setComment] = useState("")
     const displayImage = selectedImage ?? product?.frontImage
 
     const handleAddToCart = async () => {
         if (!userInfo) {
             toast("Please login to continue.")
-            return;
+            return
         }
+
         if (!selectedSize) {
             toast("Please select a size before adding to cart.")
-            return;
+            return
         }
+
         if (!product || !product._id) {
             toast("Product information is not loaded yet.")
-            return;
+            return
         }
+
         try {
-            const cartData = { productId: product._id, quantity: qty, productType: 'Product', size: selectedSize };
-            await addToCart(cartData).unwrap();
-            toast(`${qty} ${product.name} added to the cart.`);
+            const cartData = {
+                productId: product._id,
+                quantity: qty,
+                productType: "Product",
+                size: selectedSize,
+            }
+
+            await addToCart(cartData).unwrap()
+            toast(`${qty} ${product.name} added to the cart.`)
         } catch (error) {
-            toast(`Error: ${error}`);
+            toast(`Error: ${error}`)
         }
-    };
+    }
+
+    const handleAddToWishlist = async () => {
+        if (!userInfo) {
+            toast("Please login to continue.")
+            return
+        }
+
+        if (!productId) {
+            return
+        }
+
+        try {
+            await addToWishlist({ productId }).unwrap()
+            toast("Added to wishlist.")
+        } catch (error) {
+            toast(`Error: ${error}`)
+        }
+    }
+
+    const handleRemoveFromWishlist = async () => {
+        if (!userInfo) {
+            toast("Please login to continue.")
+            return
+        }
+
+        if (!productId) {
+            return
+        }
+
+        try {
+            await removeFromWishlist(productId).unwrap()
+            toast("Removed from wishlist.")
+        } catch (error) {
+            toast(`Error: ${error}`)
+        }
+    }
+
+    const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        if (!userInfo) {
+            toast("Please login to review the product.")
+            return
+        }
+
+        if (!productId) {
+            return
+        }
+
+        try {
+            await createReview({ productId, rating, comment }).unwrap()
+            toast("Review submitted successfully.")
+            setComment("")
+            setRating(5)
+            await refetch()
+        } catch (error) {
+            toast(`Error: ${error}`)
+        }
+    }
 
     if (isLoading) {
         return (
@@ -75,10 +159,10 @@ const ProductPage = () => {
 
     return (
         <div className="product-detail-container">
-            <div className='image-container-desktop'>
-                <div className='big-image-container'>
+            <div className="image-container-desktop">
+                <div className="big-image-container">
                     <Image
-                        src={displayImage}
+                        src={displayImage ?? product.frontImage}
                         alt={product?.name}
                         className="product-detail-image"
                         width={300}
@@ -87,18 +171,18 @@ const ProductPage = () => {
                 </div>
                 <div className="small-images-container">
                     <Image
-                        src={product?.frontImage}
+                        src={product.frontImage}
                         alt={product?.name}
                         className="small-image"
-                        onClick={() => setSelectedImage(product?.frontImage)}
+                        onClick={() => setSelectedImage(product.frontImage)}
                         width={300}
                         height={300}
                     />
                     <Image
-                        src={product?.backImage}
+                        src={product.backImage}
                         alt={product?.name}
                         className="small-image"
-                        onClick={() => setSelectedImage(product?.backImage)}
+                        onClick={() => setSelectedImage(product.backImage)}
                         width={300}
                         height={300}
                     />
@@ -117,15 +201,16 @@ const ProductPage = () => {
             </div>
             <div className="product-detail-desc">
                 <h1>{product.name}</h1>
-                {isLoading ? (
-                    <p id="category">Loading...</p>
-                ) : error ? (
-                    <p id="category">Error loading category</p>
-                ) : (
-                    <p id="category">{product?.category?.name}</p>
-                )}
+                <p id="category">{product?.category?.name}</p>
                 <div className="product-detail-review">
-                    <Rating rate={product.rating} className="" showScore description={`from ${product.numReviews} reviews`} />
+                    {product.numReviews > 0 && (
+                        <Rating
+                            rate={product.rating}
+                            className="mt-4"
+                            showScore
+                            // description={`from ${product.numReviews} reviews`}
+                        />
+                    )}
                 </div>
                 <p className="price">₹{product.price}</p>
                 <p className="tax">Inclusive of all taxes</p>
@@ -160,27 +245,42 @@ const ProductPage = () => {
                         Add to Cart
                     </button>
                     {itemExistCheck && itemExistCheck.exists ? (
-                        <button type="button" className="add-to-wishlist" onClick={handleRemoveFromWishlist}>
-                            <GoHeartFill style={{ marginRight: '10px' }} />
+                        <button
+                            type="button"
+                            className="add-to-wishlist"
+                            onClick={handleRemoveFromWishlist}
+                        >
+                            <GoHeartFill style={{ marginRight: "10px" }} />
                             Added to Wishlist
                         </button>
                     ) : (
-                        <button type="button" className="add-to-wishlist" onClick={handleAddToWishlist}>
-                            <GoHeart style={{ marginRight: '10px' }} />
+                        <button
+                            type="button"
+                            className="add-to-wishlist"
+                            onClick={handleAddToWishlist}
+                        >
+                            <GoHeart style={{ marginRight: "10px" }} />
                             Add to Wishlist
                         </button>
                     )}
-
                 </div>
                 <div className="product-detail-desc-buttons-mobile">
                     {itemExistCheck && itemExistCheck.exists ? (
-                        <button type="button" className="add-to-wishlist" onClick={handleRemoveFromWishlist}>
-                            <GoHeartFill style={{ marginRight: '10px' }} />
+                        <button
+                            type="button"
+                            className="add-to-wishlist"
+                            onClick={handleRemoveFromWishlist}
+                        >
+                            <GoHeartFill style={{ marginRight: "10px" }} />
                             Wishlist
                         </button>
                     ) : (
-                        <button type="button" className="add-to-wishlist" onClick={handleAddToWishlist}>
-                            <GoHeart style={{ marginRight: '10px' }} />
+                        <button
+                            type="button"
+                            className="add-to-wishlist"
+                            onClick={handleAddToWishlist}
+                        >
+                            <GoHeart style={{ marginRight: "10px" }} />
                             Wishlist
                         </button>
                     )}
@@ -214,4 +314,125 @@ const ProductPage = () => {
     )
 }
 
+type ProductInfoProps = {
+    title: string
+    content?: string
+}
+
+function ProductInfo({ title, content }: ProductInfoProps) {
+    return (
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-black/60">
+                {title}
+            </h2>
+            <p className="text-sm leading-6 text-black/80">{content || "Not available."}</p>
+        </section>
+    )
+}
+
+function PinCodeCheck() {
+    const [pinCode, setPinCode] = useState("")
+
+    return (
+        <section className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-black/60">
+                Check Delivery
+            </h2>
+            <div className="flex gap-3">
+                <input
+                    value={pinCode}
+                    onChange={(event) => setPinCode(event.target.value)}
+                    placeholder="Enter pincode"
+                    className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none"
+                />
+                <button type="button" className="rounded-xl bg-black px-4 py-3 text-sm text-white">
+                    Check
+                </button>
+            </div>
+        </section>
+    )
+}
+
+type ReviewTabsProps = {
+    loadingProductReview: boolean
+    userInfo: RootState["auth"]["userInfo"]
+    submitHandler: (event: FormEvent<HTMLFormElement>) => void
+    rating: number
+    setRating: Dispatch<SetStateAction<number>>
+    comment: string
+    setComment: Dispatch<SetStateAction<string>>
+    product: ProductType
+}
+
+function ReviewTabs({
+    loadingProductReview,
+    userInfo,
+    submitHandler,
+    rating,
+    setRating,
+    comment,
+    setComment,
+    product,
+}: ReviewTabsProps) {
+    return (
+        <section className="mt-8 space-y-6 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-black/60">
+                    Reviews
+                </h2>
+                <div className="mt-4 space-y-4">
+                    {product.reviews.length ? (
+                        product.reviews.map((review: ReviewType) => (
+                            <article key={review._id ?? `${review.user}-${review.createdAt}`} className="rounded-xl bg-white/60 p-4">
+                                <div className="flex items-center justify-between gap-4">
+                                    <strong>{review.name}</strong>
+                                    <span className="text-sm text-black/60">{review.rating.toFixed(1)}</span>
+                                </div>
+                                <p className="mt-2 text-sm text-black/75">{review.comment}</p>
+                            </article>
+                        ))
+                    ) : (
+                        <p className="text-sm text-black/60">No reviews yet.</p>
+                    )}
+                </div>
+            </div>
+
+            <form onSubmit={submitHandler} className="space-y-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-black/60">
+                    Write a Review
+                </h3>
+                <label className="block space-y-2 text-sm">
+                    <span>Rating</span>
+                    <input
+                        type="range"
+                        min="1"
+                        max="5"
+                        step="0.5"
+                        value={rating}
+                        onChange={(event) => setRating(Number(event.target.value))}
+                        className="w-full"
+                    />
+                </label>
+                <label className="block space-y-2 text-sm">
+                    <span>Comment</span>
+                    <textarea
+                        value={comment}
+                        onChange={(event) => setComment(event.target.value)}
+                        rows={4}
+                        className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 outline-none"
+                        placeholder={userInfo ? "Share your thoughts" : "Login to write a review"}
+                        disabled={!userInfo}
+                    />
+                </label>
+                <button
+                    type="submit"
+                    disabled={!userInfo || loadingProductReview}
+                    className="rounded-xl bg-black px-5 py-3 text-sm text-white disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                    {loadingProductReview ? "Submitting..." : "Submit Review"}
+                </button>
+            </form>
+        </section>
+    )
+}
 export default ProductPage

@@ -1,6 +1,6 @@
 "use client"
 import { useFetchCategoriesQuery } from "@/redux/api/categoryApiSlice"
-import ErrorCard from "../errorCard/errorCard"
+import { ErrorCard } from "../errorCard/errorCard"
 import { ProductCardSkeleton } from "../productCard/productCardSkeleton/productCardSkeleton"
 import CategoryCard from "./categoryCard/categoryCard"
 import { CategoryType } from "@/types/categoryType"

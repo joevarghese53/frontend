@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import Navbar from "@/components/navbar/navbar"
 import Footer from "@/components/footer/footer"
 import { Providers } from "./providers"
+import { Toaster } from "@/components/ui/sonner"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -39,6 +40,7 @@ export default function RootLayout({
               <Navbar></Navbar>
             </header>
             <main>{children}</main>
+            <Toaster />
             <footer>
               <Footer></Footer>
             </footer>

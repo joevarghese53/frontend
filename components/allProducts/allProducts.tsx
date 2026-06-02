@@ -1,6 +1,6 @@
 "use client"
 import { useAllProductsQuery } from "../../redux/api/productApiSlice"
-import ErrorCard from "../errorCard/errorCard"
+import { ErrorCard } from "../errorCard/errorCard"
 import ProductCard from "../productCard/productCard"
 import { ProductCardSkeleton } from "../productCard/productCardSkeleton/productCardSkeleton"
 import "./allProducts.css"

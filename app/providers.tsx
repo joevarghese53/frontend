@@ -3,8 +3,8 @@
 import { useEffect } from "react"
 import { Provider } from "react-redux"
 import { useDispatch } from "react-redux"
-import { setCredentials } from "@/redux/state/auth/authSlice"
 import store from "../redux/store"
+import { setCredentials } from "@/redux/state/auth/authSlice"
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
