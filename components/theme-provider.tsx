@@ -34,7 +34,7 @@ function applyDocumentTheme(theme: Exclude<Theme, "system">) {
 
 function ThemeProvider({
   children,
-  defaultTheme = "system",
+  defaultTheme = "light",
   enableSystem = true,
   disableTransitionOnChange = true,
   storageKey = "theme",
