@@ -24,7 +24,6 @@ export default function Page() {
   const [color, setColor] = useState("black");
   const [category, setCategory] = useState("regular");
   const [side, setSide] = useState<"front" | "back">("front");
-
   const [cache, setCache] = useState<DesignCache>({});
 
   const [generateImage, { isLoading: isGenerating }] = useGenerateImageMutation();
@@ -39,6 +38,22 @@ export default function Page() {
     () => `${color}-${category}-back`,
     [color, category]
   );
+
+  const handleRemoveFront = () => {
+    setCache((prev) => {
+      const updated = { ...prev };
+      delete updated[frontKey];
+      return updated;
+    });
+  };
+
+  const handleRemoveBack = () => {
+    setCache((prev) => {
+      const updated = { ...prev };
+      delete updated[backKey];
+      return updated;
+    });
+  };
 
   const handleGenerateImage = async () => {
     try {
@@ -97,7 +112,7 @@ export default function Page() {
       }
 
       const formData = new FormData();
-      
+
       formData.append("prompt", prompt);
       formData.append("category", category);
 
@@ -206,6 +221,8 @@ export default function Page() {
             backImageUrl={
               cache[backKey]?.mockup ?? null
             }
+            onRemoveFront={handleRemoveFront}
+            onRemoveBack={handleRemoveBack}
           />
           {/* Create Button */}
           <Button

@@ -2,7 +2,16 @@ import React from 'react'
 import { Button } from '../ui/button'
 import { Shirt } from 'lucide-react'
 
-const FinalProduct = ({ color, category, frontImageUrl, backImageUrl }: { color: string; category: string; frontImageUrl: string | null; backImageUrl: string | null }) => {
+type FinalProductProps = {
+  color: string;
+  category: string;
+  frontImageUrl: string | null;
+  backImageUrl: string | null;
+  onRemoveFront: () => void;
+  onRemoveBack: () => void;
+};
+
+const FinalProduct = ({ color, category, frontImageUrl, backImageUrl, onRemoveFront, onRemoveBack }: FinalProductProps) => {
 
     const frontImage = frontImageUrl || `/images/customs/canvas/${color}_tshirt_${category}_front_desktop.png`;
     const backImage = backImageUrl || `/images/customs/canvas/${color}_tshirt_${category}_back_desktop.png`;
@@ -32,7 +41,7 @@ const FinalProduct = ({ color, category, frontImageUrl, backImageUrl }: { color:
                     <Button
                         variant="destructive"
                         className="w-full"
-                        onClick={() => { }}
+                        onClick={onRemoveFront}
                     >
                         Remove Front Design
                     </Button>
@@ -57,7 +66,7 @@ const FinalProduct = ({ color, category, frontImageUrl, backImageUrl }: { color:
                     <Button
                         variant="destructive"
                         className="w-full"
-                        onClick={() => { }}
+                        onClick={onRemoveBack}
                     >
                         Remove Back Design
                     </Button>
@@ -65,7 +74,7 @@ const FinalProduct = ({ color, category, frontImageUrl, backImageUrl }: { color:
             </div>
 
             {/* Note */}
-            <div className="flex items-center gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-3">
+            <div className="flex items-center gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 mt-5">
                 <div className="flex h-5 w-6 items-center justify-center rounded-full border-2 border-amber-500 text-amber-500 font-bold">
                     i
                 </div>
