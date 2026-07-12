@@ -76,13 +76,6 @@ const FinalProduct = ({ color, category, frontImageUrl, backImageUrl }: { color:
                     adjusted accordingly.
                 </p>
             </div>
-
-            {/* Create Button */}
-            <Button
-                className="mt-5 w-full rounded-2xl text-xl py-5 font-semibold bg-black hover:bg-zinc-900"
-            >
-                Create Product
-            </Button>
         </div>
     )
 }
