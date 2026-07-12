@@ -1,14 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
+import { useRouter } from "next/navigation";
 import { PromptInput } from "@/components/customs/promptInput";
 import { ColorSelector } from "@/components/customs/colorSelector";
 import { CategorySelector } from "@/components/customs/categorySelector";
 import { Preview } from "@/components/customs/preview";
 import { FinalProduct } from "@/components/customs/finalProduct";
 import { Button } from "@/components/ui/button";
-
 import { useGenerateImageMutation } from "@/redux/api/generateImageApiSlice";
 import { useCreateCProductMutation } from "@/redux/api/cProductApiSlice";
 
@@ -20,6 +19,8 @@ type GeneratedDesign = {
 type DesignCache = Record<string, GeneratedDesign>;
 
 export default function Page() {
+  const router = useRouter();
+
   const [prompt, setPrompt] = useState("");
   const [color, setColor] = useState("black");
   const [category, setCategory] = useState("regular");
@@ -115,6 +116,7 @@ export default function Page() {
 
       formData.append("prompt", prompt);
       formData.append("category", category);
+      formData.append("color", color);
 
       if (front) {
         formData.append(
@@ -158,6 +160,8 @@ export default function Page() {
 
       console.log(response);
 
+      // Redirect to the product page
+      router.push(`/cproduct/${response._id}`);
     } catch (err) {
       console.error(err);
     }
