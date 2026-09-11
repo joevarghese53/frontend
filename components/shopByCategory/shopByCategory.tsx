@@ -4,14 +4,16 @@ import { ErrorCard } from "../errorCard/errorCard"
 import { ProductCardSkeleton } from "../productCard/productCardSkeleton/productCardSkeleton"
 import CategoryCard from "./categoryCard/categoryCard"
 import { CategoryType } from "@/types/categoryType"
+import { useRefetchHome } from "@/redux/hooks/useRefetchHome"
 
 const ShopByCategory = () => {
   const {
     data: categories,
     isLoading,
     error,
-    refetch,
   } = useFetchCategoriesQuery()
+
+  const refetchHome = useRefetchHome()
 
   const imageMap: Record<string, string> = {
     "Regular T-Shirts": "/images/categories/regular-tshirts.jpg",
@@ -38,7 +40,7 @@ const ShopByCategory = () => {
           <ErrorCard
             title="Failed to load!"
             message="Please check again later."
-            onRetry={refetch}
+            onRetry={refetchHome}
           />
         </div>
       </section>

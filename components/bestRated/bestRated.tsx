@@ -1,4 +1,5 @@
 "use client"
+import { useRefetchHome } from "@/redux/hooks/useRefetchHome"
 import { useGetTopProductsQuery } from "../../redux/api/productApiSlice"
 import { ErrorCard } from "../errorCard/errorCard"
 import ProductCard from "../productCard/productCard"
@@ -6,7 +7,8 @@ import { ProductCardSkeleton } from "../productCard/productCardSkeleton/productC
 import "./bestRated.css"
 
 const BestRated = () => {
-  const { data, isLoading, error, refetch } = useGetTopProductsQuery()
+  const { data, isLoading, error } = useGetTopProductsQuery()
+  const refetchHome = useRefetchHome()
 
   if (isLoading) {
     return (
@@ -24,7 +26,7 @@ const BestRated = () => {
         <ErrorCard
           title="Failed to load!"
           message="Please check again later."
-          onRetry={refetch}
+          onRetry={refetchHome}
         />
       </div>
     )
