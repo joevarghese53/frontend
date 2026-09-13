@@ -1,9 +1,10 @@
 import { apiSlice } from "./apiSlice";
 import { CPRODUCT_URL } from "../constants";
+import { CustomProduct } from "@/types/cProductType";
 
 export const cProductApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({  
-        getCProducts: builder.query({
+        getCProducts: builder.query<CustomProduct[], void>({
             query: () => `${CPRODUCT_URL}`,
             providesTags: ["CProduct"],
         }),

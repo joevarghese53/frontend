@@ -8,8 +8,9 @@ import { CategorySelector } from "@/components/customs/categorySelector";
 import { Preview } from "@/components/customs/preview";
 import { FinalProduct } from "@/components/customs/finalProduct";
 import { Button } from "@/components/ui/button";
+import { MyCreations } from "@/components/customs/myCreations";
 import { useGenerateImageMutation } from "@/redux/api/generateImageApiSlice";
-import { useCreateCProductMutation } from "@/redux/api/cProductApiSlice";
+import { useCreateCProductMutation, useGetCProductsQuery } from "@/redux/api/cProductApiSlice";
 
 type GeneratedDesign = {
   design: string;
@@ -29,6 +30,7 @@ export default function Page() {
 
   const [generateImage, { isLoading: isGenerating }] = useGenerateImageMutation();
   const [createProduct, { isLoading: isCreating }] = useCreateCProductMutation();
+  const { data: cProducts, isLoading: isCProductsLoading } = useGetCProductsQuery();
 
   const frontKey = useMemo(
     () => `${color}-${category}-front`,
@@ -201,7 +203,7 @@ export default function Page() {
 
       {/* RIGHT PANEL */}
 
-      <div className="sticky top-32 h-fit">
+      <div className="h-fit">
         <div className="p-5 rounded-[15px] border shadow-[0_0_14px_8px_rgba(0,0,0,0.16),0_0_4px_1px_rgba(0,0,0,0.16)]">
           <Preview
             color={color}
@@ -237,6 +239,14 @@ export default function Page() {
             {isCreating ? "Creating..." : "Create Product"}
           </Button>
         </div>
+      </div>
+
+      {/* MY CREATIONS */}
+      <div className="lg:col-span-2">
+        <MyCreations
+          products={cProducts ?? []}
+          isLoading={isCProductsLoading}
+        />
       </div>
     </div>
   );

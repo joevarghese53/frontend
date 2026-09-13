@@ -5,18 +5,35 @@ import { Heart, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ProductType } from "@/types/productType"
+import { CustomProductType } from "@/types/cProductType"
 import Link from "next/link"
 
-export default function ProductCard({ product }: { product: ProductType }) {
+export default function ProductCard({
+  product,
+}: {
+  product: ProductType | CustomProductType;
+}) {
+
+  const isCustomProduct = "userId" in product;
+
+  const image =
+    product.frontImage ||
+    product.backImage ||
+    "/placeholder-product.png";
+
+  const productUrl = isCustomProduct
+    ? `/cproduct/${product._id}`
+    : `/product/${product._id}`;
+
   return (
     <Card className="w-70 border-none">
       <CardContent className="p-0">
         {/* Product Image */}
         <div className="relative w-full overflow-hidden rounded-xl bg-muted cursor-pointer">
 
-          <Link href={`/product/${product._id}`}>
+          <Link href={productUrl}>
             <Image
-              src={product.frontImage}
+              src={image}
               alt={product.name}
               width={300}
               height={300}
