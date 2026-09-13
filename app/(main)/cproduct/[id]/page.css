@@ -29,6 +29,13 @@
   display: block;
 }
 
+.cproduct-detail-image {
+  width: auto;
+  height: 50vh;
+  border-radius: 12px;
+  display: block;
+}
+
 .small-images-container {
   display: flex;
   gap: 12px;

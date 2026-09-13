@@ -141,11 +141,11 @@ const CProductPage = () => {
     return (
         <div className="product-detail-container">
             <div className="image-container-desktop">
-                <div className="big-image-container">
+                <div className="big-image-container bg-[radial-gradient(circle_at_50%_30%,#25c7e9_0%,#1d889b_35%,#236477_68%,#173d4b_100%)] rounded-3xl">
                     <Image
                         src={displayImage ?? frontImage}
                         alt={product?.name}
-                        className="product-detail-image"
+                        className="cproduct-detail-image"
                         width={300}
                         height={300}
                     />

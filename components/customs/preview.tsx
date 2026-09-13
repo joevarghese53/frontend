@@ -30,7 +30,7 @@ const Preview = ({ color, category, side, setSide, frontImageUrl, backImageUrl }
         </div>
       </div>
 
-      <div className="h-120 rounded-3xl bg-[#b9b9b9] flex items-center justify-center">
+      <div className="h-120 rounded-3xl flex items-center justify-center bg-[radial-gradient(circle_at_50%_30%,#25c7e9_0%,#1d889b_35%,#236477_68%,#173d4b_100%)]">
         {side === "front" && (
           <img
             src={frontImage}

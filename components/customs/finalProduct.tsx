@@ -31,7 +31,7 @@ const FinalProduct = ({ color, category, frontImageUrl, backImageUrl, onRemoveFr
                         </span>
                     </div>
 
-                    <div className="flex justify-center items-center mb-8 min-h-87.5">
+                    <div className="flex justify-center items-center mb-8 min-h-87.5 bg-[radial-gradient(circle_at_50%_30%,#25c7e9_0%,#1d889b_35%,#236477_68%,#173d4b_100%)] rounded-3xl">
                         <img
                             src={frontImage}
                             className="max-h-80 object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.2)]"
@@ -56,7 +56,7 @@ const FinalProduct = ({ color, category, frontImageUrl, backImageUrl, onRemoveFr
                         </span>
                     </div>
 
-                    <div className="flex justify-center items-center mb-8 min-h-87.5">
+                    <div className="flex justify-center items-center mb-8 min-h-87.5 bg-[radial-gradient(circle_at_50%_30%,#25c7e9_0%,#1d889b_35%,#236477_68%,#173d4b_100%)] rounded-3xl">
                         <img
                             src={backImage}
                             className="max-h-80 object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.2)]"
