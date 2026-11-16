@@ -1,3 +1,5 @@
+"use client"
+
 import {
   HeartIcon,
   LogOutIcon,
@@ -5,6 +7,8 @@ import {
   BarcodeIcon,
   UserIcon,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useDispatch } from "react-redux"
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar"
 import { Button } from "../../ui/button"
 import {
@@ -15,8 +19,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../ui/dropdown-menu"
+import { useLogoutMutation } from "@/redux/api/usersApiSlice"
+import { apiSlice } from "@/redux/api/apiSlice"
+import { logout as clearAuth } from "@/redux/state/auth/authSlice"
 
 const AvatarWithUserDropDown = ({ name = "Joe Varghese" }) => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const [logout] = useLogoutMutation()
+
+  const handleSignOut = async () => {
+    try {
+      await logout().unwrap()
+    } catch (error) {
+      console.error("Server sign-out failed:", error)
+    }
+
+    dispatch(clearAuth())
+    dispatch(apiSlice.util.resetApiState())
+  }
+
   const initials = name
     .split(" ")
     .map((n) => n[0])
@@ -60,7 +82,7 @@ const AvatarWithUserDropDown = ({ name = "Joe Varghese" }) => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive">
+        <DropdownMenuItem variant="destructive" onSelect={handleSignOut}>
           <LogOutIcon />
           Sign Out
         </DropdownMenuItem>
