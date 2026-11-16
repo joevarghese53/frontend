@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
 import { PromptInput } from "@/components/customs/promptInput";
 import { ColorSelector } from "@/components/customs/colorSelector";
 import { CategorySelector } from "@/components/customs/categorySelector";
@@ -11,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { MyCreations } from "@/components/customs/myCreations";
 import { useGenerateImageMutation } from "@/redux/api/generateImageApiSlice";
 import { useCreateCProductMutation, useGetCProductsQuery } from "@/redux/api/cProductApiSlice";
+import type { RootState } from "@/redux/store";
 
 type GeneratedDesign = {
   design: string;
@@ -21,6 +24,7 @@ type DesignCache = Record<string, GeneratedDesign>;
 
 export default function Page() {
   const router = useRouter();
+  const { userInfo } = useSelector((state: RootState) => state.auth);
 
   const [prompt, setPrompt] = useState("");
   const [color, setColor] = useState("black");
@@ -59,6 +63,11 @@ export default function Page() {
   };
 
   const handleGenerateImage = async () => {
+    if (!userInfo) {
+      toast("Please sign in to generate a design.");
+      return;
+    }
+
     try {
       const response = await generateImage({
         prompt,
