@@ -4,8 +4,6 @@ const SizeChart = ({ show, handleClose, category }) => {
     if (!show) {
         return null;
     }
-    console.log("sizechart",category);
-
     let sizeData = [];
 
     if(category === "Regular T-Shirts"){
@@ -16,7 +14,7 @@ const SizeChart = ({ show, handleClose, category }) => {
             { size: 'XL', chest: '42"', length: '28"' },
             { size: 'XXL', chest: '44"', length: '29"' },
         ];
-    } else if(category === "Oversized T-shirts"){
+    } else if(category === "Oversized T-Shirts"){
         sizeData = [
             { size: 'S', chest: '43"', length: '28.5"' },
             { size: 'M', chest: '45"', length: '29"' },
@@ -70,7 +68,11 @@ const SizeChart = ({ show, handleClose, category }) => {
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colSpan="3"><strong>Tip: </strong>If you don’t find an exact match go for the next size.<br></br>Measurements may vary 1 inch ( + or - )</td>
+                            <td colSpan={category === "Oversized Hoodies" ? 5 : 3}>
+                                <strong>Tip: </strong>If you don’t find an exact match go for the next size.
+                                <br />
+                                Measurements may vary 1 inch ( + or - )
+                            </td>
                         </tr>
                     </tfoot>
                 </table>
