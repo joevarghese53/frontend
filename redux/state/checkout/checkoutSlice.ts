@@ -1,26 +1,24 @@
-import { RootState } from "@/redux/store"
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
+import type { ShippingAddress } from "@/types/shippingAddressType"
+import type { RootState } from "@/redux/store"
 
-const initialState =
-  typeof window !== "undefined" && localStorage.getItem("selectedAddress")
-    ? { selectedAddress: JSON.parse(localStorage.getItem("selectedAddress")!) }
-    : { selectedAddress: null }
+type CheckoutState = {
+  selectedAddress: ShippingAddress | null
+}
+
+const initialState: CheckoutState = {
+  selectedAddress: null,
+}
 
 const checkoutSlice = createSlice({
   name: "checkout",
-  initialState: initialState,
+  initialState,
   reducers: {
-    selectShippingAddress: (state, action) => {
+    selectShippingAddress: (
+      state,
+      action: PayloadAction<ShippingAddress | null>
+    ) => {
       state.selectedAddress = action.payload
-      // Save to localStorage
-      if (typeof window !== "undefined") {
-        try {
-          const serializedState = JSON.stringify(state.selectedAddress)
-          localStorage.setItem("selectedAddress", serializedState)
-        } catch (e) {
-          console.warn("Could not save state to localStorage", e)
-        }
-      }
     },
   },
 })

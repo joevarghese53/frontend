@@ -1,10 +1,14 @@
 // redux/api/shippingAdressApiSlice.js
 import { apiSlice } from './apiSlice';
 import { SHIPPING_ADDRESS_URL } from "../constants";
+import type {
+  ShippingAddress,
+  ShippingAddressInput,
+} from "@/types/shippingAddressType";
 
 export const shippingAddressApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getUserShippingAddresses: builder.query({
+    getUserShippingAddresses: builder.query<ShippingAddress[], void>({
       query: () => ({
         url: SHIPPING_ADDRESS_URL,
         method: 'GET',
@@ -12,7 +16,7 @@ export const shippingAddressApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['ShippingAddress'],
     }),
-    createShippingAddress: builder.mutation({
+    createShippingAddress: builder.mutation<unknown, ShippingAddressInput>({
       query: (newAddress) => ({
         url: SHIPPING_ADDRESS_URL,
         method: 'POST',
@@ -21,7 +25,10 @@ export const shippingAddressApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['ShippingAddress'],
     }),
-    updateShippingAddress: builder.mutation({
+    updateShippingAddress: builder.mutation<
+      unknown,
+      { id: string; updatedAddress: ShippingAddressInput }
+    >({
       query: ({ id, updatedAddress }) => ({
         url: `${SHIPPING_ADDRESS_URL}/${id}`,
         method: 'PUT',
@@ -30,7 +37,7 @@ export const shippingAddressApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['ShippingAddress'],
     }),
-    deleteShippingAddress: builder.mutation({
+    deleteShippingAddress: builder.mutation<unknown, string>({
       query: (id) => ({
         url: `${SHIPPING_ADDRESS_URL}/${id}`,
         method: 'DELETE',
@@ -38,7 +45,7 @@ export const shippingAddressApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['ShippingAddress'],
     }),
-    setDefaultShippingAddress: builder.mutation({
+    setDefaultShippingAddress: builder.mutation<unknown, string>({
       query: (id) => ({
         url: `${SHIPPING_ADDRESS_URL}/${id}/default`,
         method: 'PATCH',

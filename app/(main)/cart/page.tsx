@@ -8,17 +8,11 @@ import { toast } from "sonner"
 import { AiOutlineShopping } from "react-icons/ai"
 import { FiArrowRight, FiShoppingBag, FiTrash2 } from "react-icons/fi"
 import ErrorCard from "@/components/errorCard/errorCard"
+import { calculateCartTotals } from "@/lib/cartPricing"
 import { useGetCartQuery, useRemoveFromCartMutation } from "@/redux/api/cartApiSlice"
 import type { RootState } from "@/redux/store"
 import type { CartItem } from "@/types/cartType"
 import "./page.css"
-
-type CartTotals = {
-  itemsPrice: string
-  shippingPrice: string
-  taxPrice: string
-  totalPrice: string
-}
 
 function getErrorMessage(error: unknown): string {
   if (typeof error !== "object" || error === null) {
@@ -46,26 +40,6 @@ function getErrorMessage(error: unknown): string {
   }
 
   return "An unexpected error occurred."
-}
-
-function calculateCartTotals(items: CartItem[]): CartTotals {
-  const itemsPriceWithTax = items.reduce(
-    (total, item) => total + item.productId.price * item.quantity,
-    0
-  )
-  const taxPrice = items.reduce((total, item) => {
-    const gstRate = item.productId.price > 1000 ? 0.12 : 0.05
-    const itemTax = item.productId.price - item.productId.price / (1 + gstRate)
-    return total + itemTax * item.quantity
-  }, 0)
-  const shippingPrice = itemsPriceWithTax > 1000 ? 0 : 150
-
-  return {
-    itemsPrice: (itemsPriceWithTax - taxPrice).toFixed(2),
-    shippingPrice: shippingPrice.toFixed(2),
-    taxPrice: taxPrice.toFixed(2),
-    totalPrice: (itemsPriceWithTax + shippingPrice).toFixed(2),
-  }
 }
 
 const Cart = () => {
@@ -315,7 +289,7 @@ const Cart = () => {
             View Details
           </button>
         </div>
-        <Link href="/AddressPage" className="cart-mobile-checkout">
+        <Link href="/address" className="cart-mobile-checkout">
           Checkout
         </Link>
       </div>
