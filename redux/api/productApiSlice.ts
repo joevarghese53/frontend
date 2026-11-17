@@ -77,7 +77,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
 
     createReview: builder.mutation({
       query: (data) => ({
-        url: `${PRODUCT_URL}/${data.productId}/reviews`,
+        url: `${PRODUCT_URL}/reviews/add-review/${data.productId}`,
         method: "POST",
         body: data,
       }),

@@ -21,6 +21,26 @@ import { SizeSelector } from "@/components/ui/sizeSelector/sizeSelector"
 import type { ProductType, ReviewType } from "@/types/productType"
 import "./page.css"
 
+function getErrorMessage(error: unknown): string {
+    if (error instanceof Error) {
+        return error.message
+    }
+
+    if (typeof error === "object" && error !== null && "data" in error) {
+        const data = error.data
+        if (
+            typeof data === "object" &&
+            data !== null &&
+            "message" in data &&
+            typeof data.message === "string"
+        ) {
+            return data.message
+        }
+    }
+
+    return "An error occurred."
+}
+
 const ProductPage = () => {
     const params = useParams()
     const productId = typeof params.id === "string" ? params.id : params.id?.[0] ?? ""
@@ -132,7 +152,7 @@ const ProductPage = () => {
             setRating(5)
             await refetch()
         } catch (error) {
-            toast.error(`Error: ${error}`)
+            toast.error(`${getErrorMessage(error)}`)
         }
     }
 
