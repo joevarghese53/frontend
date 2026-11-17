@@ -33,6 +33,7 @@ import type {
   ShippingAddress,
   ShippingAddressInput,
 } from "@/types/shippingAddressType"
+import CheckoutSteps from "@/components/checkoutSteps/checkoutSteps"
 import "./page.css"
 
 const createEmptyAddress = (): ShippingAddressInput => ({
@@ -356,10 +357,7 @@ const AddressPage = () => {
 
   return (
     <div className="address-page-main-container">
-      <div className="address-header">
-        <h4 id="address-header-one">MY CART ------- ADDRESS</h4>
-        <h4 id="address-header-two">------- CHECKOUT ------- PAYMENT</h4>
-      </div>
+      <CheckoutSteps currentStep="address" />
 
       <div className="address-content">
         <div className="address-content-body">

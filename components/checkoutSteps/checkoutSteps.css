@@ -1,0 +1,51 @@
+
+.checkout-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+  padding: 24px 32px;
+}
+
+.checkout-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #999;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: color 0.2s ease;
+}
+
+.checkout-step.active {
+  color: #000;
+}
+
+.checkout-step.completed {
+  color: #16a34a;
+}
+
+.checkout-step-divider {
+  color: #ccc;
+  font-weight: 400;
+}
+
+@media (max-width: 600px) {
+  .checkout-steps {
+    gap: 5px;
+    padding: 16px 8px;
+  }
+
+  .checkout-step {
+    font-size: 10px;
+    gap: 4px;
+    letter-spacing: 0;
+  }
+
+  .checkout-step-divider {
+    font-size: 10px;
+  }
+}

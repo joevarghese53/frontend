@@ -12,6 +12,7 @@ import { calculateCartTotals } from "@/lib/cartPricing"
 import { useGetCartQuery, useRemoveFromCartMutation } from "@/redux/api/cartApiSlice"
 import type { RootState } from "@/redux/store"
 import type { CartItem } from "@/types/cartType"
+import CheckoutSteps from "@/components/checkoutSteps/checkoutSteps"
 import "./page.css"
 
 function getErrorMessage(error: unknown): string {
@@ -158,10 +159,7 @@ const Cart = () => {
 
   return (
     <div className="cart-page-container">
-      <div className="address-header">
-        <h4 id="address-header-one">MY CART</h4>
-        <h4 id="address-header-two"> ------- ADDRESS ------- CHECKOUT ------- PAYMENT</h4>
-      </div>
+      <CheckoutSteps currentStep="cart" />
 
       <div className="cart-content-wrapper">
         <section className="cart-items-section" aria-labelledby="cart-items-heading">
