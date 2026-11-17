@@ -7,7 +7,7 @@ import {
   BarcodeIcon,
   UserIcon,
 } from "lucide-react"
-import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { useDispatch } from "react-redux"
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar"
 import { Button } from "../../ui/button"
@@ -25,7 +25,6 @@ import { logout as clearAuth } from "@/redux/state/auth/authSlice"
 
 const AvatarWithUserDropDown = ({ name = "Joe Varghese" }) => {
   const dispatch = useDispatch()
-  const router = useRouter()
   const [logout] = useLogoutMutation()
 
   const handleSignOut = async () => {
@@ -65,9 +64,11 @@ const AvatarWithUserDropDown = ({ name = "Joe Varghese" }) => {
             <BarcodeIcon />
             Orders
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <ShoppingCartIcon />
-            Cart
+          <DropdownMenuItem asChild>
+            <Link href="/cart">
+              <ShoppingCartIcon />
+              Cart
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <HeartIcon />
