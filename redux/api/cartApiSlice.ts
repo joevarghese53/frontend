@@ -1,10 +1,11 @@
 // redux/api/cartApiSlice.js
 import { apiSlice } from "./apiSlice";
 import { CART_URL } from "../constants";
+import type { CartResponse, RemoveCartItemArgs } from "@/types/cartType";
 
 export const cartApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getCart: builder.query({
+    getCart: builder.query<CartResponse, void>({
       query: () => `${CART_URL}`,
       providesTags: ["Cart"],
     }),
@@ -25,9 +26,9 @@ export const cartApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Cart"],
     }),
-    removeFromCart: builder.mutation({
+    removeFromCart: builder.mutation<unknown, RemoveCartItemArgs>({
       query: ({ productId, size }) => ({
-        url: `${CART_URL}/${productId}`,
+        url: `${CART_URL}/removeItem/${productId}`,
         method: "DELETE",
         body: { productId, size },
       }),
