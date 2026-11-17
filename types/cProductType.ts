@@ -23,7 +23,6 @@ export type CustomProductType = {
 
   description: string;
   price: number;
-  countInStock: number;
 
   offers: string;
   returnPolicy: string;

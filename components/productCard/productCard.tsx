@@ -1,12 +1,20 @@
 "use client"
 
 import Image from "next/image"
-import { Heart, Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Heart } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { ProductType } from "@/types/productType"
 import { CustomProductType } from "@/types/cProductType"
 import Link from "next/link"
+import { toast } from "sonner"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux/store"
+import {
+  useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
+  useCheckItemInWishlistQuery
+} from "@/redux/api/wishlistApiSlice"
+
 
 export default function ProductCard({
   product,
@@ -14,7 +22,16 @@ export default function ProductCard({
   product: ProductType | CustomProductType;
 }) {
 
+  const { userInfo } = useSelector((state: RootState) => state.auth)
+  const productId = "userId" in product ? product._id : product._id;
   const isCustomProduct = "userId" in product;
+  const [addToWishlist] = useAddToWishlistMutation()
+  const [removeFromWishlist] = useRemoveFromWishlistMutation()
+  const { data: itemExistCheck } = useCheckItemInWishlistQuery(productId, {
+    skip: !userInfo || !productId,
+  })
+  const isInWishlist = Boolean(itemExistCheck?.exists)
+
 
   const image =
     product.frontImage ||
@@ -24,6 +41,29 @@ export default function ProductCard({
   const productUrl = isCustomProduct
     ? `/cproduct/${product._id}`
     : `/product/${product._id}`;
+
+  const handleWishlistToggle = async () => {
+    if (!userInfo) {
+      toast.info("Please login to continue.")
+      return
+    }
+
+    if (!productId) {
+      return
+    }
+
+    try {
+      if (isInWishlist) {
+        await removeFromWishlist(productId).unwrap()
+        toast.success("Removed from wishlist.")
+      } else {
+        await addToWishlist({ productId }).unwrap()
+        toast.success("Added to wishlist.")
+      }
+    } catch (error) {
+      toast.error(`Error: ${error}`)
+    }
+  }
 
   return (
     <Card className="w-70 border-none">
@@ -42,8 +82,15 @@ export default function ProductCard({
           </Link>
 
           {/* Wishlist */}
-          <button className="absolute top-3 right-3 cursor-pointer rounded-full bg-white p-2 shadow-sm transition hover:scale-110">
-            <Heart className="h-4 w-4" />
+          
+          <button
+            type="button"
+            aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+            aria-pressed={isInWishlist}
+            className="absolute top-3 right-3 cursor-pointer rounded-full bg-white p-2 shadow-sm transition hover:scale-110"
+            onClick={handleWishlistToggle}
+          >
+            <Heart className={`h-4 w-4 ${isInWishlist ? "fill-black text-black" : ""}`} />
           </button>
         </div>
         {/* Product Info */}
@@ -57,15 +104,6 @@ export default function ProductCard({
 
           <span className="font-semibold">Rs.{product.price.toFixed(0)}</span>
         </div>
-
-        {/* Add to Cart */}
-        <Button
-          variant="outline"
-          className="mt-3 flex w-full cursor-pointer items-center gap-2"
-        >
-          <Plus size={16} />
-          Add to Cart
-        </Button>
       </CardContent>
     </Card>
   )

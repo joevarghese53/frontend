@@ -38,7 +38,6 @@ export type ProductType = {
   numReviews: number
 
   price: number
-  countInStock: number
 
   offers?: string
   returnpolicy?: string

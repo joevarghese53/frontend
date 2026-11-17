@@ -10,9 +10,9 @@ import { useGetProductDetailsQuery } from "@/redux/api/productApiSlice"
 import {
     useAddToWishlistMutation,
     useRemoveFromWishlistMutation,
+    useCheckItemInWishlistQuery
 } from "@/redux/api/wishlistApiSlice"
 import { useAddToCartMutation } from "@/redux/api/cartApiSlice"
-import { useCheckItemInWishlistQuery } from "@/redux/api/wishlistApiSlice"
 import { useCreateReviewMutation } from "@/redux/api/productApiSlice"
 import { ProductCardSkeleton } from "@/components/productCard/productCardSkeleton/productCardSkeleton"
 import { ErrorCard } from "@/components/errorCard/errorCard"
@@ -45,6 +45,7 @@ const ProductPage = () => {
     const displayImage = selectedImage ?? product?.frontImage
 
     const handleAddToCart = async () => {
+        console.log("Add to Cart clicked")
         if (!userInfo) {
             toast.info("Please login to continue.")
             return
@@ -69,6 +70,7 @@ const ProductPage = () => {
             }
 
             await addToCart(cartData).unwrap()
+            console.log("Added to cart:", cartData)
             toast.success(`${qty} ${product.name} added to the cart.`)
         } catch (error) {
             toast.error(`Error: ${error}`)
@@ -219,26 +221,20 @@ const ProductPage = () => {
                 </div>
                 <div className="quantity">
                     <span>Quantity:</span>
-                    {product.countInStock > 0 && (
-                        <div>
-                            <select
-                                value={qty}
-                                onChange={(e) => setQty(Number(e.target.value))}
-                                className="select-quantity"
-                            >
-                                {[...Array(product.countInStock).keys()].map((x) => (
-                                    <option key={x + 1} value={x + 1}>
-                                        {x + 1}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    )}
+                    <div>
+                        <input
+                            type="number"
+                            min={1}
+                            step={1}
+                            value={qty}
+                            onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
+                            className="select-quantity"
+                        />
+                    </div>
                 </div>
                 <div className="product-detail-desc-buttons-desktop">
                     <button
                         type="button"
-                        disabled={product.countInStock === 0}
                         className="add-to-cart"
                         onClick={handleAddToCart}
                     >
@@ -286,7 +282,6 @@ const ProductPage = () => {
                     )}
                     <button
                         type="button"
-                        disabled={product.countInStock === 0}
                         className="add-to-cart"
                         onClick={handleAddToCart}
                     >
