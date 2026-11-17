@@ -64,7 +64,7 @@ export default function Page() {
 
   const handleGenerateImage = async () => {
     if (!userInfo) {
-      toast("Please sign in to generate a design.");
+      toast.warning("Please sign in to generate a design.");
       return;
     }
 

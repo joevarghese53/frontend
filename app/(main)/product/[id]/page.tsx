@@ -46,17 +46,17 @@ const ProductPage = () => {
 
     const handleAddToCart = async () => {
         if (!userInfo) {
-            toast("Please login to continue.")
+            toast.info("Please login to continue.")
             return
         }
 
         if (!selectedSize) {
-            toast("Please select a size before adding to cart.")
+            toast.warning("Please select a size before adding to cart.")
             return
         }
 
         if (!product || !product._id) {
-            toast("Product information is not loaded yet.")
+            toast.info("Product information is not loaded yet.")
             return
         }
 
@@ -69,15 +69,15 @@ const ProductPage = () => {
             }
 
             await addToCart(cartData).unwrap()
-            toast(`${qty} ${product.name} added to the cart.`)
+            toast.success(`${qty} ${product.name} added to the cart.`)
         } catch (error) {
-            toast(`Error: ${error}`)
+            toast.error(`Error: ${error}`)
         }
     }
 
     const handleAddToWishlist = async () => {
         if (!userInfo) {
-            toast("Please login to continue.")
+            toast.info("Please login to continue.")
             return
         }
 
@@ -87,15 +87,15 @@ const ProductPage = () => {
 
         try {
             await addToWishlist({ productId }).unwrap()
-            toast("Added to wishlist.")
+            toast.success("Added to wishlist.")
         } catch (error) {
-            toast(`Error: ${error}`)
+            toast.error(`Error: ${error}`)
         }
     }
 
     const handleRemoveFromWishlist = async () => {
         if (!userInfo) {
-            toast("Please login to continue.")
+            toast.info("Please login to continue.")
             return
         }
 
@@ -105,9 +105,9 @@ const ProductPage = () => {
 
         try {
             await removeFromWishlist(productId).unwrap()
-            toast("Removed from wishlist.")
+            toast.success("Removed from wishlist.")
         } catch (error) {
-            toast(`Error: ${error}`)
+            toast.error(`Error: ${error}`)
         }
     }
 
@@ -115,7 +115,7 @@ const ProductPage = () => {
         event.preventDefault()
 
         if (!userInfo) {
-            toast("Please login to review the product.")
+            toast.info("Please login to review the product.")
             return
         }
 
@@ -125,12 +125,12 @@ const ProductPage = () => {
 
         try {
             await createReview({ productId, rating, comment }).unwrap()
-            toast("Review submitted successfully.")
+            toast.success("Review submitted successfully.")
             setComment("")
             setRating(5)
             await refetch()
         } catch (error) {
-            toast(`Error: ${error}`)
+            toast.error(`Error: ${error}`)
         }
     }
 
