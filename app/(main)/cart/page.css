@@ -10,7 +10,7 @@
 #address-header-one {
   font-size: 16px;
   font-weight: 700;
-  color: #f02d34;
+  color: #000000;
   margin: 0;
   position: relative;
   display: flex;
@@ -29,7 +29,7 @@
 #address-header-two {
   font-size: 16px;
   font-weight: 700;
-  color: #666;
+  color: #838383;
   margin: 0;
   letter-spacing: 1px;
   position: relative;
@@ -442,7 +442,7 @@
   justify-content: center;
   gap: 8px;
   width: 100%;
-  background: #f02d34;
+  background: #000000;
   color: white;
   padding: 10px 13px;
   border-radius: 12px;
@@ -454,7 +454,7 @@
 }
 
 .cart-checkout-button:hover {
-  background: #f02d34;
+  background: #000000;
   transform: translateY(-2px);
 }
 

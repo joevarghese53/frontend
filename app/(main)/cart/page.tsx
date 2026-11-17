@@ -292,7 +292,7 @@ const Cart = () => {
               </div>
             </div>
 
-            <Link href="/AddressPage" className="cart-checkout-button">
+            <Link href="/address" className="cart-checkout-button">
               Proceed to Checkout
               <FiArrowRight aria-hidden="true" />
             </Link>
