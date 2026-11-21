@@ -14,6 +14,7 @@ import type { RootState } from "@/redux/store"
 import type { CartItem } from "@/types/cartType"
 import CheckoutSteps from "@/components/checkoutSteps/checkoutSteps"
 import "./page.css"
+import CartItems from "@/components/cartItems/page"
 
 function getErrorMessage(error: unknown): string {
   if (typeof error !== "object" || error === null) {
@@ -162,73 +163,11 @@ const Cart = () => {
       <CheckoutSteps currentStep="cart" />
 
       <div className="cart-content-wrapper">
-        <section className="cart-items-section" aria-labelledby="cart-items-heading">
-          <div className="cart-items-header">
-            <h3 id="cart-items-heading">CART ITEMS</h3>
-            <span className="cart-items-count">
-              {itemCount} {itemCount === 1 ? "item" : "items"}
-            </span>
-          </div>
-
-          <div className="cart-items-list">
-            {items.map((item) => {
-              return (
-                <article
-                  className="cart-item-card"
-                  key={item._id}
-                >
-                  <div className="cart-item-image">
-                    <Image
-                      src={item.productId.frontImage}
-                      alt={item.productId.name}
-                      width={130}
-                      height={170}
-                      sizes="130px"
-                    />
-                  </div>
-
-                  <div className="cart-item-details">
-                    <div className="cart-item-info">
-                      <div>
-                        <h4 className="cart-item-name">{item.productId.name}</h4>
-                        <p className="cart-item-category">
-                          {item.productId.category}
-                        </p>
-                      </div>
-                      <div className="cart-item-meta">
-                        <span className="cart-item-size">Size: {item.size}</span>
-                        <span className="cart-item-quantity">
-                          Qty: {item.quantity}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="cart-item-price">
-                      <div className="cart-item-price-details">
-                        <span className="cart-item-price-amount">
-                          ₹{item.productId.price.toFixed(2)}
-                        </span>
-                        <span className="cart-item-price-note">
-                          MRP inclusive of all taxes
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        className="cart-item-remove"
-                        onClick={() => void handleRemoveFromCart(item)}
-                        disabled={isRemoving}
-                        aria-label={`Remove ${item.productId.name} from cart`}
-                        title="Remove item"
-                      >
-                        <FiTrash2 aria-hidden="true" />
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              )
-            })}
-          </div>
-        </section>
+        <CartItems
+          items={items}
+          onRemove={handleRemoveFromCart}
+          isRemoving={isRemoving}
+        />
 
         <section
           className="cart-summary-section"
