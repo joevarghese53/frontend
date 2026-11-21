@@ -56,3 +56,25 @@ export type CreateOrderResponse = {
   updatedAt: string
   __v: number
 }
+
+export type PaymentInitiationRequest = {
+  orderId: string
+}
+
+export type PaymentInitiationResponse = {
+  success: boolean
+  redirectUrl: string
+  merchantOrderId: string
+}
+
+export type OrderDetailsResponse = Omit<
+  CreateOrderResponse,
+  "user" | "shippingAddress"
+> & {
+  user: {
+    _id?: string
+    username: string
+    email: string
+  }
+  shippingAddress: OrderShippingAddress
+}

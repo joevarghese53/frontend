@@ -3,6 +3,9 @@ import { ORDERS_URL } from "../constants";
 import type {
   CreateOrderRequest,
   CreateOrderResponse,
+  OrderDetailsResponse,
+  PaymentInitiationRequest,
+  PaymentInitiationResponse,
 } from "@/types/orderType";
 
 export const orderApiSlice = apiSlice.injectEndpoints({
@@ -16,7 +19,7 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['Order'],
     }),
 
-    getOrderDetails: builder.query({
+    getOrderDetails: builder.query<OrderDetailsResponse, string>({
       query: (id) => ({
         url: `${ORDERS_URL}/${id}`,
       }),
@@ -38,7 +41,10 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       providesTags: ['Order'],
     }),
     
-    payForOrder: builder.mutation({
+    payForOrder: builder.mutation<
+      PaymentInitiationResponse,
+      PaymentInitiationRequest
+    >({
       query: (data) => ({
         url: `${ORDERS_URL}/initiate-payment`, 
         method: "POST",

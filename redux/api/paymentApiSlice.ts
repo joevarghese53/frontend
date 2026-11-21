@@ -1,10 +1,14 @@
-//usersApiSlice.js
 import { apiSlice } from "./apiSlice";
 import { PAYMENT_URL } from "../constants";
 
+export type PaymentStatusResponse = {
+  status: string;
+  isPaid?: boolean;
+};
+
 export const paymentApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    checkPaymentStatus: builder.mutation({
+    checkPaymentStatus: builder.mutation<PaymentStatusResponse, string>({
       query: (merchantOrderId) => ({
         url: `${PAYMENT_URL}/status?id=${merchantOrderId}`,
         method: "GET",
