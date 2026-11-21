@@ -2,6 +2,11 @@ export type CartItemProduct = {
   _id: string
   name: string
   frontImage: string
+  backImage?: string
+  frontDesign?: string | null
+  backDesign?: string | null
+  frontUpload?: string | null
+  backUpload?: string | null
   price: number
   category: string
 }

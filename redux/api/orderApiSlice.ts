@@ -1,9 +1,13 @@
 import { apiSlice } from "./apiSlice";
 import { ORDERS_URL } from "../constants";
+import type {
+  CreateOrderRequest,
+  CreateOrderResponse,
+} from "@/types/orderType";
 
 export const orderApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    createOrder: builder.mutation({
+    createOrder: builder.mutation<CreateOrderResponse, CreateOrderRequest>({
       query: (order) => ({
         url: ORDERS_URL,
         method: "POST",
