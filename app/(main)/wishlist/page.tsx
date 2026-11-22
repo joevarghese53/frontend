@@ -125,7 +125,6 @@ export default function WishlistPage() {
             {wishlist.items.length === 1 ? "item" : "items"}
           </p>
         </div>
-        <Heart className="wishlist-header-icon" aria-hidden="true" />
       </header>
 
       <div className="wishlist-product-grid">
