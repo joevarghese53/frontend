@@ -1,9 +1,7 @@
 
 "use client"
 
-import Link from "next/link"
 import type { Ref } from "react"
-import { FiArrowRight } from "react-icons/fi"
 import "./page.css"
 
 interface OrderSummaryProps {
@@ -11,8 +9,6 @@ interface OrderSummaryProps {
   taxPrice: number | string
   shippingPrice: number | string
   totalPrice: number | string
-  checkoutUrl?: string
-  checkoutLabel?: string
   summaryRef?: Ref<HTMLElement>
 }
 
@@ -21,8 +17,6 @@ const OrderSummary = ({
   taxPrice,
   shippingPrice,
   totalPrice,
-  checkoutUrl = "/address",
-  checkoutLabel = "Proceed to Checkout",
   summaryRef,
 }: OrderSummaryProps) => {
   return (
@@ -63,11 +57,6 @@ const OrderSummary = ({
             <span>₹{totalPrice}</span>
           </div>
         </div>
-
-        <Link href={checkoutUrl} className="order-summary-checkout-button">
-          {checkoutLabel}
-          <FiArrowRight aria-hidden="true" />
-        </Link>
 
         <div className="order-summary-note">
           <p>Free shipping on orders above ₹1000</p>

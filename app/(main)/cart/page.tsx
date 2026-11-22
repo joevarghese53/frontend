@@ -167,13 +167,20 @@ const Cart = () => {
           isRemoving={isRemoving}
         />
 
-        <OrderSummary
-          itemsPrice={itemsPrice}
-          taxPrice={taxPrice}
-          shippingPrice={shippingPrice}
-          totalPrice={totalPrice}
-          summaryRef={billingRef}
-        />
+        <aside className="cart-sidebar">
+          <OrderSummary
+            itemsPrice={itemsPrice}
+            taxPrice={taxPrice}
+            shippingPrice={shippingPrice}
+            totalPrice={totalPrice}
+            summaryRef={billingRef}
+          />
+
+          <Link href="/address" className="cart-checkout-button">
+            Proceed to Checkout
+            <FiArrowRight aria-hidden="true" />
+          </Link>
+        </aside>
       </div>
 
       <div className="cart-mobile-bottom">

@@ -8,17 +8,28 @@
   padding: 20px;
 }
 
-.payment-page-bottom-container {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 40px;
+.cart-content-wrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 65fr) minmax(0, 35fr);
+  gap: 24px;
+  width: 100%;
+  align-items: start;
 }
 
 .payment-page-left-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.cart-sidebar {
+  position: sticky;
+  top: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
 }
 
 .payment-item-card {
@@ -374,11 +385,6 @@
 }
 
 @media (max-width: 900px) {
-  .payment-page-bottom-container {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
   .payment-page-right-container {
     margin-top: 20px;
   }

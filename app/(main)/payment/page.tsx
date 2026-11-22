@@ -14,6 +14,7 @@ import {
 import { useCheckPaymentStatusMutation } from "@/redux/api/paymentApiSlice"
 import CartItems from "@/components/cartItems/page"
 import "./page.css"
+import OrderSummary from "@/components/orderSummary/page"
 
 declare global {
   interface Window {
@@ -235,14 +236,14 @@ const PaymentPage = () => {
         </div>
       )}
 
-      <div className="payment-page-bottom-container">
+      <div className="cart-content-wrapper">
         {orderDetails.orderItems.length === 0 ? (
           <div className="payment-items-empty">This order has no items.</div>
         ) : (
           <CartItems variant="payment" items={orderDetails.orderItems} />
         )}
 
-        <aside className="payment-page-right-container" aria-label="Payment summary">
+        <aside className="cart-sidebar">
           <div className="payment-page-summary">
             <div className="shipping-summary">
               <div className="shipping-summary-header">
@@ -299,37 +300,16 @@ const PaymentPage = () => {
                 </div>
               </div>
             </div>
-
-            <div className="payment-summary-card">
-              <div className="payment-summary-header">Order Summary</div>
-              <div className="summary-table">
-                <div className="summary-row">
-                  <span className="summary-label">Cart Total (Excl. of all taxes)</span>
-                  <span className="summary-value">₹{orderDetails.itemsPrice}</span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">GST</span>
-                  <span className="summary-value">₹{orderDetails.taxPrice}</span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Shipping Charges</span>
-                  <span className="summary-value">
-                    {Number(orderDetails.shippingPrice) > 0
-                      ? `₹${orderDetails.shippingPrice}`
-                      : "Free"}
-                  </span>
-                </div>
-                <div className="summary-row total">
-                  <span className="summary-label">Total Amount</span>
-                  <span className="summary-value">₹{orderDetails.totalPrice}</span>
-                </div>
-              </div>
-            </div>
           </div>
-
+          <OrderSummary
+            itemsPrice={orderDetails.itemsPrice}
+            taxPrice={orderDetails.taxPrice}
+            shippingPrice={orderDetails.shippingPrice}
+            totalPrice={orderDetails.totalPrice}
+          />
           <button
             type="button"
-            className="pay-now-button-desktop"
+            className="cart-checkout-button"
             onClick={() => void handlePayment()}
             disabled={isPaying || orderDetails.isPaid}
           >
@@ -340,6 +320,7 @@ const PaymentPage = () => {
                 : "Pay Now"}
           </button>
         </aside>
+
       </div>
 
       <div className="payment-mobile-bottom">
@@ -381,10 +362,10 @@ const PaymentPage = () => {
             )}
             {(pollStatus === "PROCESSING" ||
               pollAttempts >= MAX_ATTEMPTS) && (
-              <button type="button" onClick={() => setIsPolling(false)}>
-                Close
-              </button>
-            )}
+                <button type="button" onClick={() => setIsPolling(false)}>
+                  Close
+                </button>
+              )}
           </div>
         </div>
       )}
