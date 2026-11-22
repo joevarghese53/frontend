@@ -8,7 +8,8 @@ import {
   UserIcon,
 } from "lucide-react"
 import Link from "next/link"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import type { RootState } from "@/redux/store"
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar"
 import { Button } from "../../ui/button"
 import {
@@ -23,8 +24,9 @@ import { useLogoutMutation } from "@/redux/api/usersApiSlice"
 import { apiSlice } from "@/redux/api/apiSlice"
 import { logout as clearAuth } from "@/redux/state/auth/authSlice"
 
-const AvatarWithUserDropDown = ({ name = "Joe Varghese" }) => {
+const AvatarWithUserDropDown = () => {
   const dispatch = useDispatch()
+  const userInfo = useSelector((state: RootState) => state.auth.userInfo)
   const [logout] = useLogoutMutation()
 
   const handleSignOut = async () => {
@@ -38,6 +40,8 @@ const AvatarWithUserDropDown = ({ name = "Joe Varghese" }) => {
     dispatch(apiSlice.util.resetApiState())
   }
 
+  const name =
+    userInfo && typeof userInfo.name === "string" ? userInfo.name : "Account"
   const initials = name
     .split(" ")
     .map((n) => n[0])
@@ -56,9 +60,11 @@ const AvatarWithUserDropDown = ({ name = "Joe Varghese" }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <UserIcon />
-            Account
+          <DropdownMenuItem asChild>
+            <Link href="/myAccount">
+              <UserIcon />
+              Account
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/myOrders">

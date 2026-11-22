@@ -25,7 +25,7 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Order'],
     }),
-    
+
     getMyOrders: builder.query<CreateOrderResponse[], void>({
       query: () => ({
         url: `${ORDERS_URL}/mine`,
@@ -34,19 +34,27 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       providesTags: ['Order'],
     }),
 
-    getOrders: builder.query({
+    getAllOrders: builder.query<CreateOrderResponse[], void>({
       query: () => ({
-        url: ORDERS_URL,
+        url: `${ORDERS_URL}/admin/all`,
       }),
       providesTags: ['Order'],
     }),
-    
+
+    deleteOrder: builder.mutation<unknown, string>({
+      query: (orderId) => ({
+        url: `${ORDERS_URL}/admin/${orderId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ['Order'],
+    }),
+
     payForOrder: builder.mutation<
       PaymentInitiationResponse,
       PaymentInitiationRequest
     >({
       query: (data) => ({
-        url: `${ORDERS_URL}/initiate-payment`, 
+        url: `${ORDERS_URL}/initiate-payment`,
         method: "POST",
         body: data,
       }),
@@ -117,6 +125,7 @@ export const {
   useConfirmOrderMutation,
   useShippedOrderMutation,
   useOutForDeliveryOrderMutation,
-  useGetOrdersQuery,
+  useGetAllOrdersQuery,
+  useDeleteOrderMutation,
   usePayForOrderMutation,
 } = orderApiSlice;

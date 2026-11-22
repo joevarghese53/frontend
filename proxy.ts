@@ -19,12 +19,7 @@ export async function proxy(request: NextRequest) {
   }
 
   try {
-    const { payload } = await jwtVerify(token, secret)
-
-    // Admin route protection
-    if (pathname.startsWith("/admin") && !payload.isAdmin) {
-      return NextResponse.redirect(new URL("/", request.url))
-    }
+    await jwtVerify(token, secret)
   } catch {
     return NextResponse.redirect(new URL("/login", request.url))
   }
@@ -33,7 +28,7 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/profile/:path*", "/admin/:path*"],
+  matcher: ["/profile/:path*"],
 }
 
 // "/customs/:path*"

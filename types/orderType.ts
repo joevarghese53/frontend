@@ -37,9 +37,15 @@ export type OrderItemResponse = {
   productType: string
 }
 
+export type OrderUserSummary = {
+  _id: string
+  username: string
+  email: string
+}
+
 export type CreateOrderResponse = {
   _id: string
-  user: string
+  user: string | OrderUserSummary
   orderItems: OrderItemResponse[]
   shippingAddress: OrderShippingAddress
   itemsPrice: number
