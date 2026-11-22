@@ -1,6 +1,13 @@
 "use client"
 
-import { FiMail, FiMapPin, FiPhone, FiUser } from "react-icons/fi"
+import { useId, useState } from "react"
+import {
+  FiChevronDown,
+  FiMail,
+  FiMapPin,
+  FiPhone,
+  FiUser,
+} from "react-icons/fi"
 import type { OrderShippingAddress } from "@/types/orderType"
 import "./page.css"
 
@@ -16,21 +23,54 @@ const ShippingDetailsSummary = ({
   user,
   shippingAddress,
 }: ShippingDetailsSummaryProps) => {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const detailsId = useId()
+
   return (
     <section
       className="shipping-summary"
       aria-labelledby="shipping-summary-heading"
     >
-      <div className="shipping-summary-header">
+      <button
+        type="button"
+        className="shipping-summary-toggle"
+        aria-expanded={isExpanded}
+        aria-controls={detailsId}
+        onClick={() => setIsExpanded((expanded) => !expanded)}
+      >
         <span className="shipping-summary-header-icon" aria-hidden="true">
           <FiMapPin />
         </span>
-        <div>
+        <span className="shipping-summary-heading">
           <span className="shipping-summary-eyebrow">Delivery</span>
-          <h2 id="shipping-summary-heading">Shipping Details</h2>
-        </div>
-      </div>
-      <dl className="shipping-summary-rows">
+          <span
+            id="shipping-summary-heading"
+            className="shipping-summary-title"
+            role="heading"
+            aria-level={2}
+          >
+            Shipping Details
+          </span>
+        </span>
+        {!isExpanded && (
+          <span className="shipping-summary-preview">
+            <strong>{shippingAddress.fullName}</strong>
+            <span>
+              {shippingAddress.addressLine1}, {shippingAddress.city} -{" "}
+              {shippingAddress.postalCode}
+            </span>
+          </span>
+        )}
+        <FiChevronDown
+          className={`shipping-summary-chevron${isExpanded ? " is-expanded" : ""}`}
+          aria-hidden="true"
+        />
+      </button>
+      <dl
+        id={detailsId}
+        className="shipping-summary-rows"
+        hidden={!isExpanded}
+      >
         <div className="shipping-summary-row">
           <dt className="shipping-summary-left">
             <span className="shipping-summary-row-icon" aria-hidden="true">

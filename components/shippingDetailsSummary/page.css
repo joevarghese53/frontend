@@ -6,16 +6,33 @@
   padding: 20px;
 }
 
-.shipping-summary-header {
-  display: flex;
+.shipping-summary-toggle {
+  display: grid;
+  grid-template-areas:
+    "icon heading chevron"
+    "icon preview chevron";
+  grid-template-columns: 42px minmax(0, 1fr) 20px;
   align-items: center;
-  gap: 12px;
+  column-gap: 12px;
+  width: 100%;
   margin-bottom: 18px;
   padding-bottom: 16px;
+  border: 0;
   border-bottom: 1px solid #ededed;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.shipping-summary-toggle:focus-visible {
+  outline: 2px solid #555;
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .shipping-summary-header-icon {
+  grid-area: icon;
   display: grid;
   width: 42px;
   height: 42px;
@@ -25,6 +42,11 @@
   background: #f4f4f4;
   color: #111;
   font-size: 20px;
+}
+
+.shipping-summary-heading {
+  grid-area: heading;
+  min-width: 0;
 }
 
 .shipping-summary-eyebrow {
@@ -37,11 +59,45 @@
   text-transform: uppercase;
 }
 
-.shipping-summary-header h2 {
-  margin: 0;
+.shipping-summary-title {
+  display: block;
   color: #222;
   font-size: 18px;
   line-height: 1.25;
+}
+
+.shipping-summary-preview {
+  grid-area: preview;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  margin-top: 8px;
+  color: #666;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.shipping-summary-preview strong,
+.shipping-summary-preview span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shipping-summary-preview strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.shipping-summary-chevron {
+  grid-area: chevron;
+  justify-self: end;
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+.shipping-summary-chevron.is-expanded {
+  transform: rotate(180deg);
 }
 
 .shipping-summary-rows {
@@ -49,6 +105,10 @@
   flex-direction: column;
   gap: 8px;
   margin: 0;
+}
+
+.shipping-summary-rows[hidden] {
+  display: none;
 }
 
 .shipping-summary-left {
@@ -119,7 +179,8 @@
     border-radius: 10px;
   }
 
-  .shipping-summary-header {
+  .shipping-summary-toggle {
+    grid-template-columns: 38px minmax(0, 1fr) 18px;
     margin-bottom: 12px;
     padding-bottom: 12px;
   }
@@ -129,7 +190,7 @@
     height: 38px;
   }
 
-  .shipping-summary-header h2 {
+  .shipping-summary-title {
     font-size: 16px;
   }
 
