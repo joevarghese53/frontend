@@ -176,7 +176,7 @@ const AddressPage = () => {
 
     try {
       const order = await createOrder(orderData).unwrap()
-      toast.success("Order placed. Continue to payment.")
+      toast.success("Order initiated. Continue to payment.")
       router.push(`/payment?orderId=${encodeURIComponent(order._id)}`)
     } catch (error) {
       toast.error(`Could not place order: ${getErrorMessage(error)}`)
