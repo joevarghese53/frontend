@@ -23,13 +23,13 @@
 }
 
 .cart-sidebar {
-  position: sticky;
   top: 140px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
   min-width: 0;
+  align-self: flex-start;
 }
 
 .payment-item-card {
@@ -97,60 +97,6 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-}
-
-.payment-page-summary {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.shipping-summary {
-  background: white;
-  border-radius: 16px;
-  padding: 20px 24px 18px 24px;
-}
-
-.shipping-summary-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 18px;
-  font-weight: 700;
-  color: black;
-  margin-bottom: 16px;
-}
-
-.shipping-summary-icon {
-  font-size: 20px;
-}
-
-.shipping-summary-left {
-  display: flex;
-  gap: 12px;
-  font-size: 14px;
-  color: #666;
-  min-width: 90px;
-  align-self: center;
-}
-
-.shipping-summary-row {
-  gap: 6px;
-  display: flex;
-  border: 1px dashed grey;
-  padding: 5px;
-}
-
-.shipping-summary-right {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  font-size: 14px;
-  color: #333;
-}
-
-.shipping-summary-value {
-  word-break: break-word;
 }
 
 .payment-summary-card {
@@ -396,8 +342,16 @@
     padding: 7px;
   }
 
+  .cart-content-wrapper {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .payment-sidebar,
+  .payment-sidebar.is-sticky {
+    position: static;
+  }
+
   .payment-item-card,
-  .shipping-summary,
   .payment-summary-card {
     padding: 12px;
     border-radius: 10px;

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react"
 import Script from "next/script"
 import { useSearchParams } from "next/navigation"
 import { toast } from "sonner"
-import { FiMail, FiMapPin, FiPhone, FiUser } from "react-icons/fi"
 import CheckoutSteps from "@/components/checkoutSteps/checkoutSteps"
 import { ErrorCard } from "@/components/errorCard/errorCard"
 import {
@@ -13,6 +12,7 @@ import {
 } from "@/redux/api/orderApiSlice"
 import { useCheckPaymentStatusMutation } from "@/redux/api/paymentApiSlice"
 import CartItems from "@/components/cartItems/page"
+import ShippingDetailsSummary from "@/components/shippingDetailsSummary/page"
 import "./page.css"
 import OrderSummary from "@/components/orderSummary/page"
 
@@ -243,64 +243,13 @@ const PaymentPage = () => {
           <CartItems variant="payment" items={orderDetails.orderItems} />
         )}
 
-        <aside className="cart-sidebar">
-          <div className="payment-page-summary">
-            <div className="shipping-summary">
-              <div className="shipping-summary-header">
-                <FiMapPin className="shipping-summary-icon" aria-hidden="true" />
-                <span>Shipping Details</span>
-              </div>
-              <div className="shipping-summary-rows">
-                <div className="shipping-summary-row">
-                  <div className="shipping-summary-left">
-                    <FiUser aria-hidden="true" /> <span>Name:</span>
-                  </div>
-                  <div className="shipping-summary-value">
-                    {orderDetails.user.username}
-                  </div>
-                </div>
-                <div className="shipping-summary-row">
-                  <div className="shipping-summary-left">
-                    <FiMail aria-hidden="true" /> <span>Email:</span>
-                  </div>
-                  <div className="shipping-summary-value">
-                    {orderDetails.user.email}
-                  </div>
-                </div>
-                <div className="shipping-summary-row">
-                  <div className="shipping-summary-left">
-                    <FiMapPin aria-hidden="true" /> <span>Address:</span>
-                  </div>
-                  <div className="shipping-summary-value">
-                    {orderDetails.shippingAddress.fullName}, <br />
-                    {orderDetails.shippingAddress.addressLine1}, <br />
-                    {orderDetails.shippingAddress.addressLine2 && (
-                      <>
-                        {orderDetails.shippingAddress.addressLine2}, <br />
-                      </>
-                    )}
-                    {orderDetails.shippingAddress.landmark && (
-                      <>
-                        {orderDetails.shippingAddress.landmark}, <br />
-                      </>
-                    )}
-                    {orderDetails.shippingAddress.city} -{" "}
-                    {orderDetails.shippingAddress.postalCode},{" "}
-                    {orderDetails.shippingAddress.state},{" "}
-                    {orderDetails.shippingAddress.country}
-                  </div>
-                </div>
-                <div className="shipping-summary-row">
-                  <div className="shipping-summary-left">
-                    <FiPhone aria-hidden="true" /> <span>Contact:</span>
-                  </div>
-                  <div className="shipping-summary-value">
-                    {orderDetails.shippingAddress.phoneNumber}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <aside
+          className="cart-sidebar"
+        >
+          <ShippingDetailsSummary
+            user={orderDetails.user}
+            shippingAddress={orderDetails.shippingAddress}
+          />
           <OrderSummary
             itemsPrice={orderDetails.itemsPrice}
             taxPrice={orderDetails.taxPrice}
