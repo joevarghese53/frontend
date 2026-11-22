@@ -12,6 +12,7 @@ import {
   usePayForOrderMutation,
 } from "@/redux/api/orderApiSlice"
 import { useCheckPaymentStatusMutation } from "@/redux/api/paymentApiSlice"
+import CartItems from "@/components/cartItems/page"
 import "./page.css"
 
 declare global {
@@ -56,7 +57,6 @@ function getErrorMessage(error: unknown): string {
 const PaymentPage = () => {
   const searchParams = useSearchParams()
   const orderId = searchParams.get("orderId")
-  const [scriptReady, setScriptReady] = useState(false)
   const [isPolling, setIsPolling] = useState(false)
   const [pollStatus, setPollStatus] = useState("INITIATED")
   const [pollAttempts, setPollAttempts] = useState(0)
@@ -74,7 +74,6 @@ const PaymentPage = () => {
   } = useGetOrderDetailsQuery(orderId ?? "", {
     skip: !orderId,
   })
-  console.log("Order details:", orderDetails)
 
   const stopPolling = () => {
     pollingActiveRef.current = false
@@ -90,12 +89,6 @@ const PaymentPage = () => {
       if (pollingTimeoutRef.current) {
         clearTimeout(pollingTimeoutRef.current)
       }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (window.PhonePeCheckout) {
-      setScriptReady(true)
     }
   }, [])
 
@@ -232,7 +225,6 @@ const PaymentPage = () => {
       <Script
         src="https://mercury.phonepe.com/web/bundle/checkout.js"
         strategy="afterInteractive"
-        onLoad={() => setScriptReady(true)}
         onError={() => toast.error("Could not load the payment system.")}
       />
       <CheckoutSteps currentStep="payment" />
@@ -244,37 +236,11 @@ const PaymentPage = () => {
       )}
 
       <div className="payment-page-bottom-container">
-        <section className="payment-page-left-container" aria-label="Order items">
-          <div className="payment-items-list">
-            {orderDetails.orderItems.length === 0 ? (
-              <div>This order has no items.</div>
-            ) : orderDetails.orderItems.map((item) => (
-              <article className="payment-item-card" key={item._id}>
-                <div className="payment-item-image">
-                  <img src={item.frontImage} alt={item.name} />
-                </div>
-                <div className="payment-item-details">
-                  <div className="payment-item-info">
-                    <div>
-                      <h2 className="payment-item-name">{item.name}</h2>
-                      <p className="payment-item-category">{item.category}</p>
-                    </div>
-                    <div className="payment-item-meta">
-                      <span>Size: {item.size}</span>
-                      <span>Qty: {item.qty}</span>
-                    </div>
-                  </div>
-                  <div className="payment-item-price">
-                    <span className="payment-item-price-amount">₹{item.price}</span>
-                    <span className="payment-item-price-note">
-                      MRP inclusive of all taxes
-                    </span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+        {orderDetails.orderItems.length === 0 ? (
+          <div className="payment-items-empty">This order has no items.</div>
+        ) : (
+          <CartItems variant="payment" items={orderDetails.orderItems} />
+        )}
 
         <aside className="payment-page-right-container" aria-label="Payment summary">
           <div className="payment-page-summary">
