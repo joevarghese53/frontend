@@ -35,6 +35,7 @@ import type {
 } from "@/types/shippingAddressType"
 import CheckoutSteps from "@/components/checkoutSteps/checkoutSteps"
 import "./page.css"
+import OrderSummary from "@/components/orderSummary/page"
 
 const createEmptyAddress = (): ShippingAddressInput => ({
   fullName: "",
@@ -359,184 +360,167 @@ const AddressPage = () => {
     <div className="address-page-main-container">
       <CheckoutSteps currentStep="address" />
 
-      <div className="address-content">
-        <div className="address-content-body">
-          <section className="addresses-section" aria-labelledby="deliver-to-heading">
-            <div className="addresses-header">
-              <h2 id="deliver-to-heading">Deliver To:</h2>
+      <div className="cart-content-wrapper">
+
+        <section className="addresses-section" aria-labelledby="deliver-to-heading">
+          <div className="addresses-header">
+            <h2 id="deliver-to-heading">Deliver To:</h2>
+            <button
+              type="button"
+              className="add-address-button"
+              onClick={handleAddNew}
+            >
+              <FiPlus aria-hidden="true" />
+              Add New Address
+            </button>
+          </div>
+
+          {addressList.length > 0 ? (
+            <div className="addresses-container">
+              {addressList.map((address) => {
+                const isSelected = selectedAddress?._id === address._id
+
+                return (
+                  <article
+                    key={address._id}
+                    className={`address-select-container ${isSelected ? "selected" : ""}`}
+                  >
+                    <div className="address-card-header">
+                      <div className="address-card-header-left">
+                        <div className="address-icon" aria-hidden="true">
+                          {address.label === "Home" && <FiHome />}
+                          {address.label === "Office" && <FaRegBuilding />}
+                          {address.label === "Other" && <FiMapPin />}
+                        </div>
+                        <div className="address-default-label">
+                          {address.isDefault ? (
+                            <span className="default-badge">
+                              <FiCheck aria-hidden="true" /> DEFAULT
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              className="set-as-default-btn"
+                              onClick={() => void handleSetAsDefault(address)}
+                              disabled={isSettingDefault}
+                            >
+                              SET AS DEFAULT
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      {isSelected && (
+                        <span className="address-selection-indicator" aria-label="Selected">
+                          <FiCheck aria-hidden="true" />
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="address-details">
+                      <p className="address-text">
+                        {address.fullName}
+                        <br />
+                        {address.addressLine1}
+                        <br />
+                        {address.addressLine2 && (
+                          <>
+                            {address.addressLine2}
+                            <br />
+                          </>
+                        )}
+                        {address.landmark && (
+                          <>
+                            {address.landmark}
+                            <br />
+                          </>
+                        )}
+                        {address.city} - {address.postalCode}, {address.state},{" "}
+                        {address.country ?? "India"}
+                        <br />
+                        <span className="contact-info">
+                          <FiPhone className="contact-icon" aria-hidden="true" />
+                          {address.phoneNumber}
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="button-container">
+                      <button
+                        type="button"
+                        className="address-page-button edit-button"
+                        onClick={() => handleEdit(address)}
+                      >
+                        <FiEdit3 aria-hidden="true" />
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="address-page-button remove-button"
+                        onClick={() => void handleDelete(address)}
+                        disabled={isDeleting}
+                      >
+                        <FiTrash2 aria-hidden="true" />
+                        Remove
+                      </button>
+                      <button
+                        type="button"
+                        className={`address-page-button select-button ${isSelected ? "selected" : ""}`}
+                        onClick={() => dispatch(selectShippingAddress(address))}
+                        aria-pressed={isSelected}
+                      >
+                        {isSelected ? (
+                          <FiCheck aria-hidden="true" />
+                        ) : (
+                          <FiMapPin aria-hidden="true" />
+                        )}
+                        {isSelected ? "Selected" : "Select"}
+                      </button>
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="address-empty-state">
+              <div className="address-empty-icon" aria-hidden="true">
+                <FiMapPin />
+              </div>
+              <h3>No addresses found</h3>
+              <p>Add your first delivery address to continue.</p>
               <button
                 type="button"
-                className="add-address-button"
+                className="add-address-button primary"
                 onClick={handleAddNew}
               >
                 <FiPlus aria-hidden="true" />
-                Add New Address
+                Add Address
               </button>
             </div>
+          )}
+        </section>
+        <aside className="cart-sidebar">
+          <OrderSummary
+            itemsPrice={itemsPrice}
+            taxPrice={taxPrice}
+            shippingPrice={shippingPrice}
+            totalPrice={totalPrice}
+          />
 
-            {addressList.length > 0 ? (
-              <div className="addresses-container">
-                {addressList.map((address) => {
-                  const isSelected = selectedAddress?._id === address._id
+          {selectedAddress ? (
+            <Link href="/checkout" className="cart-checkout-button">
+              Proceed to Checkout
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="cart-checkout-button"
+              disabled
+            >
+              Select Address to Continue
+            </button>
+          )}
+        </aside>
 
-                  return (
-                    <article
-                      key={address._id}
-                      className={`address-select-container ${isSelected ? "selected" : ""}`}
-                    >
-                      <div className="address-card-header">
-                        <div className="address-card-header-left">
-                          <div className="address-icon" aria-hidden="true">
-                            {address.label === "Home" && <FiHome />}
-                            {address.label === "Office" && <FaRegBuilding />}
-                            {address.label === "Other" && <FiMapPin />}
-                          </div>
-                          <div className="address-default-label">
-                            {address.isDefault ? (
-                              <span className="default-badge">
-                                <FiCheck aria-hidden="true" /> DEFAULT
-                              </span>
-                            ) : (
-                              <button
-                                type="button"
-                                className="set-as-default-btn"
-                                onClick={() => void handleSetAsDefault(address)}
-                                disabled={isSettingDefault}
-                              >
-                                SET AS DEFAULT
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                        {isSelected && (
-                          <span className="address-selection-indicator" aria-label="Selected">
-                            <FiCheck aria-hidden="true" />
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="address-details">
-                        <p className="address-text">
-                          {address.fullName}
-                          <br />
-                          {address.addressLine1}
-                          <br />
-                          {address.addressLine2 && (
-                            <>
-                              {address.addressLine2}
-                              <br />
-                            </>
-                          )}
-                          {address.landmark && (
-                            <>
-                              {address.landmark}
-                              <br />
-                            </>
-                          )}
-                          {address.city} - {address.postalCode}, {address.state},{" "}
-                          {address.country ?? "India"}
-                          <br />
-                          <span className="contact-info">
-                            <FiPhone className="contact-icon" aria-hidden="true" />
-                            {address.phoneNumber}
-                          </span>
-                        </p>
-                      </div>
-
-                      <div className="button-container">
-                        <button
-                          type="button"
-                          className="address-page-button edit-button"
-                          onClick={() => handleEdit(address)}
-                        >
-                          <FiEdit3 aria-hidden="true" />
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          className="address-page-button remove-button"
-                          onClick={() => void handleDelete(address)}
-                          disabled={isDeleting}
-                        >
-                          <FiTrash2 aria-hidden="true" />
-                          Remove
-                        </button>
-                        <button
-                          type="button"
-                          className={`address-page-button select-button ${isSelected ? "selected" : ""}`}
-                          onClick={() => dispatch(selectShippingAddress(address))}
-                          aria-pressed={isSelected}
-                        >
-                          {isSelected ? (
-                            <FiCheck aria-hidden="true" />
-                          ) : (
-                            <FiMapPin aria-hidden="true" />
-                          )}
-                          {isSelected ? "Selected" : "Select"}
-                        </button>
-                      </div>
-                    </article>
-                  )
-                })}
-              </div>
-            ) : (
-              <div className="address-empty-state">
-                <div className="address-empty-icon" aria-hidden="true">
-                  <FiMapPin />
-                </div>
-                <h3>No addresses found</h3>
-                <p>Add your first delivery address to continue.</p>
-                <button
-                  type="button"
-                  className="add-address-button primary"
-                  onClick={handleAddNew}
-                >
-                  <FiPlus aria-hidden="true" />
-                  Add Address
-                </button>
-              </div>
-            )}
-          </section>
-
-          <aside className="address-cart-summary-desktop" aria-label="Order summary">
-            <div className="cart-summary-card">
-              <h2>ORDER SUMMARY</h2>
-              <div className="summary-table">
-                <div className="summary-row">
-                  <span className="summary-label">Items Price:</span>
-                  <span className="summary-value">₹{itemsPrice}</span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Shipping:</span>
-                  <span className="summary-value">
-                    {Number(shippingPrice) > 0 ? `₹${shippingPrice}` : "Free"}
-                  </span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Tax:</span>
-                  <span className="summary-value">₹{taxPrice}</span>
-                </div>
-                <div className="summary-row total">
-                  <span className="summary-label">Total:</span>
-                  <span className="summary-value">₹{totalPrice}</span>
-                </div>
-              </div>
-              {selectedAddress ? (
-                <Link href="/checkout" className="address-page-checkout-btn">
-                  Proceed to Checkout
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  className="address-page-checkout-btn"
-                  disabled
-                >
-                  Select Address to Continue
-                </button>
-              )}
-            </div>
-          </aside>
-        </div>
       </div>
 
       <div className="cart-mobile-bottom">
