@@ -292,6 +292,12 @@
   margin: 16px 0;
 }
 
+.cart-summary-note {
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+}
+
 .cart-checkout-button {
   display: flex;
   align-items: center;
@@ -312,12 +318,6 @@
 .cart-checkout-button:hover {
   background: #000000;
   transform: translateY(-2px);
-}
-
-.cart-summary-note {
-  text-align: center;
-  font-size: 12px;
-  color: #666;
 }
 
 .cart-mobile-bottom {

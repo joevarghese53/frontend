@@ -1,12 +1,11 @@
 "use client"
 
 import { useRef } from "react"
-import Image from "next/image"
 import Link from "next/link"
 import { useSelector } from "react-redux"
 import { toast } from "sonner"
 import { AiOutlineShopping } from "react-icons/ai"
-import { FiArrowRight, FiShoppingBag, FiTrash2 } from "react-icons/fi"
+import { FiArrowRight, FiShoppingBag } from "react-icons/fi"
 import ErrorCard from "@/components/errorCard/errorCard"
 import { calculateCartTotals } from "@/lib/cartPricing"
 import { useGetCartQuery, useRemoveFromCartMutation } from "@/redux/api/cartApiSlice"
@@ -15,6 +14,7 @@ import type { CartItem } from "@/types/cartType"
 import CheckoutSteps from "@/components/checkoutSteps/checkoutSteps"
 import "./page.css"
 import CartItems from "@/components/cartItems/page"
+import OrderSummary from "@/components/orderSummary/page"
 
 function getErrorMessage(error: unknown): string {
   if (typeof error !== "object" || error === null) {
@@ -50,7 +50,7 @@ const Cart = () => {
     skip: !userInfo,
   })
   const [removeCartItem, { isLoading: isRemoving }] = useRemoveFromCartMutation()
-  const billingRef = useRef<HTMLDivElement>(null)
+  const billingRef = useRef<HTMLElement>(null)
 
   const scrollToBilling = () => {
     billingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -156,8 +156,6 @@ const Cart = () => {
 
   const { itemsPrice, shippingPrice, taxPrice, totalPrice } =
     calculateCartTotals(items)
-  const itemCount = items.reduce((total, item) => total + item.quantity, 0)
-
   return (
     <div className="cart-page-container">
       <CheckoutSteps currentStep="cart" />
@@ -169,50 +167,13 @@ const Cart = () => {
           isRemoving={isRemoving}
         />
 
-        <section
-          className="cart-summary-section"
-          ref={billingRef}
-          aria-labelledby="cart-summary-heading"
-        >
-          <div className="cart-summary-card">
-            <h3 className="cart-summary-title" id="cart-summary-heading">
-              ORDER SUMMARY
-            </h3>
-
-            <div className="cart-summary-details">
-              <div className="cart-summary-row">
-                <span>Subtotal</span>
-                <span>₹{itemsPrice}</span>
-              </div>
-              <div className="cart-summary-row">
-                <span>GST</span>
-                <span>₹{taxPrice}</span>
-              </div>
-              <div className="cart-summary-row">
-                <span>Shipping</span>
-                <span>
-                  {Number(shippingPrice) > 0 ? `₹${shippingPrice}` : "Free"}
-                </span>
-              </div>
-
-              <div className="cart-summary-divider" />
-
-              <div className="cart-summary-row cart-summary-total">
-                <span>Total Amount</span>
-                <span>₹{totalPrice}</span>
-              </div>
-            </div>
-
-            <Link href="/address" className="cart-checkout-button">
-              Proceed to Checkout
-              <FiArrowRight aria-hidden="true" />
-            </Link>
-
-            <div className="cart-summary-note">
-              <p>Free shipping on orders above ₹1000</p>
-            </div>
-          </div>
-        </section>
+        <OrderSummary
+          itemsPrice={itemsPrice}
+          taxPrice={taxPrice}
+          shippingPrice={shippingPrice}
+          totalPrice={totalPrice}
+          summaryRef={billingRef}
+        />
       </div>
 
       <div className="cart-mobile-bottom">
