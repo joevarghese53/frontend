@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useDispatch, useSelector } from "react-redux"
 import { FaRegBuilding } from "react-icons/fa"
 import {
@@ -20,6 +21,7 @@ import { toast } from "sonner"
 import { ErrorCard } from "@/components/errorCard/errorCard"
 import { calculateCartTotals } from "@/lib/cartPricing"
 import { useGetCartQuery } from "@/redux/api/cartApiSlice"
+import { useCreateOrderMutation } from "@/redux/api/orderApiSlice"
 import {
   useCreateShippingAddressMutation,
   useDeleteShippingAddressMutation,
@@ -33,6 +35,7 @@ import type {
   ShippingAddress,
   ShippingAddressInput,
 } from "@/types/shippingAddressType"
+import type { CreateOrderRequest } from "@/types/orderType"
 import CheckoutSteps from "@/components/checkoutSteps/checkoutSteps"
 import "./page.css"
 import OrderSummary from "@/components/orderSummary/page"
@@ -92,6 +95,7 @@ function getAddressId(value: unknown): string | null {
 }
 
 const AddressPage = () => {
+  const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const userInfo = useSelector((state: RootState) => state.auth.userInfo)
   const selectedAddress = useSelector(
@@ -109,6 +113,7 @@ const AddressPage = () => {
     error: cartError,
     refetch: refetchCart,
   } = useGetCartQuery(undefined, { skip: !userInfo })
+  const [createOrder, { isLoading: isCreatingOrder }] = useCreateOrderMutation()
 
   const [createShippingAddress, { isLoading: isCreating }] =
     useCreateShippingAddressMutation()
@@ -126,6 +131,57 @@ const AddressPage = () => {
   const [newAddress, setNewAddress] =
     useState<ShippingAddressInput>(createEmptyAddress)
   const isSaving = isCreating || isUpdating
+
+  const placeOrderHandler = async () => {
+    const activeAddress = addresses?.find(
+      (address) => address._id === selectedAddress?._id
+    )
+
+    if (!cartData?.items.length) {
+      toast.error("Your cart is empty.")
+      return
+    }
+    if (!activeAddress) {
+      toast.info("Choose a delivery address before placing your order.")
+      return
+    }
+
+    const orderData: CreateOrderRequest = {
+      orderItems: cartData.items.map((item) => ({
+        name: item.productId.name,
+        qty: item.quantity,
+        frontImage: item.productId.frontImage,
+        backImage: item.productId.backImage,
+        frontDesign: item.productId.frontDesign,
+        backDesign: item.productId.backDesign,
+        frontUpload: item.productId.frontUpload,
+        backUpload: item.productId.backUpload,
+        _id: item.productId._id,
+        size: item.size,
+        category: item.productId.category,
+        productType: item.productType,
+      })),
+      shippingAddress: {
+        fullName: activeAddress.fullName,
+        addressLine1: activeAddress.addressLine1,
+        addressLine2: activeAddress.addressLine2,
+        landmark: activeAddress.landmark,
+        city: activeAddress.city,
+        state: activeAddress.state,
+        postalCode: activeAddress.postalCode,
+        phoneNumber: activeAddress.phoneNumber,
+        country: activeAddress.country,
+      },
+    }
+
+    try {
+      const order = await createOrder(orderData).unwrap()
+      toast.success("Order placed. Continue to payment.")
+      router.push(`/payment?orderId=${encodeURIComponent(order._id)}`)
+    } catch (error) {
+      toast.error(`Could not place order: ${getErrorMessage(error)}`)
+    }
+  }
 
   useEffect(() => {
     if (!addresses) return
@@ -353,6 +409,8 @@ const AddressPage = () => {
   }
 
   const addressList = addresses
+  const activeAddress =
+    addressList.find((address) => address._id === selectedAddress?._id) ?? null
   const { itemsPrice, shippingPrice, taxPrice, totalPrice } =
     calculateCartTotals(cartItems)
 
@@ -506,10 +564,15 @@ const AddressPage = () => {
             totalPrice={totalPrice}
           />
 
-          {selectedAddress ? (
-            <Link href="/checkout" className="cart-checkout-button">
-              Proceed to Checkout
-            </Link>
+          {activeAddress ? (
+            <button
+              type="button"
+              className="cart-checkout-button"
+              onClick={() => void placeOrderHandler()}
+              disabled={isCreatingOrder}
+            >
+              {isCreatingOrder ? "Placing order…" : "Proceed to Checkout"}
+            </button>
           ) : (
             <button
               type="button"
@@ -524,10 +587,15 @@ const AddressPage = () => {
       </div>
 
       <div className="cart-mobile-bottom">
-        {selectedAddress ? (
-          <Link href="/checkout" className="cart-mobile-checkout">
-            Proceed to Checkout
-          </Link>
+        {activeAddress ? (
+          <button
+            type="button"
+            className="cart-mobile-checkout"
+            onClick={() => void placeOrderHandler()}
+            disabled={isCreatingOrder}
+          >
+            {isCreatingOrder ? "Placing order…" : "Proceed to Checkout"}
+          </button>
         ) : (
           <button type="button" className="cart-mobile-checkout" disabled>
             Select Address

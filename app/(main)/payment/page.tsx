@@ -76,6 +76,7 @@ const PaymentPage = () => {
     skip: !orderId,
   })
 
+  console.log("Order details:", orderDetails)
   const stopPolling = () => {
     pollingActiveRef.current = false
     if (pollingTimeoutRef.current) {

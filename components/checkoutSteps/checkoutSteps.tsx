@@ -4,13 +4,12 @@
 import "./checkoutSteps.css"
 
 interface CheckoutStepsProps {
-  currentStep: "cart" | "address" | "checkout" | "payment"
+  currentStep: "cart" | "address" | "payment"
 }
 
 const steps = [
   { label: "MY CART", value: "cart" },
   { label: "ADDRESS", value: "address" },
-  { label: "CHECKOUT", value: "checkout" },
   { label: "PAYMENT", value: "payment" },
 ] as const
 
