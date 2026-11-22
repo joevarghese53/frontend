@@ -1,10 +1,11 @@
 // redux/api/wishlistApiSlice.js
 import { apiSlice } from "./apiSlice";
 import { WISHLIST_URL } from "../constants";
+import type { WishlistResponse } from "@/types/wishlistType";
 
 export const wishlistApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getWishlist: builder.query({
+        getWishlist: builder.query<WishlistResponse, void>({
             query: () => `${WISHLIST_URL}`,
             providesTags: ['Wishlist'],
         }),

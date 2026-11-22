@@ -70,9 +70,11 @@ const AvatarWithUserDropDown = ({ name = "Joe Varghese" }) => {
               Cart
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <HeartIcon />
-            Wishlist
+          <DropdownMenuItem asChild>
+            <Link href="/wishlist">
+              <HeartIcon />
+              Wishlist
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
