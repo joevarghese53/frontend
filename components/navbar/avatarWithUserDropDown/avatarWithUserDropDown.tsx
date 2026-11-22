@@ -60,9 +60,11 @@ const AvatarWithUserDropDown = ({ name = "Joe Varghese" }) => {
             <UserIcon />
             Account
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <BarcodeIcon />
-            Orders
+          <DropdownMenuItem asChild>
+            <Link href="/myOrders">
+              <BarcodeIcon />
+              Orders
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/cart">

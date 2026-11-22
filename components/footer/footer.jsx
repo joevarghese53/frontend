@@ -14,7 +14,7 @@ const Footer = () => {
         <div className="footer-section">
           <h3>CUSTOMER SERVICE</h3>
           <Link href="/contactUs"> Contact Us</Link>
-          <Link href="/MyOrders"> Track Order</Link>
+          <Link href="/myOrders"> Track Order</Link>
           <Link href="/ContactUs"> Return policy</Link>
           <Link href="/ContactUs"> Cancellation policy</Link>
           <Link href="/ContactUs"> Cash on delivery</Link>

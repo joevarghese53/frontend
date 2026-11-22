@@ -26,7 +26,7 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       providesTags: ['Order'],
     }),
     
-    getMyOrders: builder.query({
+    getMyOrders: builder.query<CreateOrderResponse[], void>({
       query: () => ({
         url: `${ORDERS_URL}/mine`,
       }),
