@@ -74,7 +74,7 @@ export default function Navbar() {
           className="mt-4 space-y-4 rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-xl md:hidden"
         >
           {links.map((link) => (
-            <Link key={link.name} href="/" className="block text-lg">
+            <Link key={link.name} href={link.href} className="block text-lg">
               {link.name}
             </Link>
           ))}

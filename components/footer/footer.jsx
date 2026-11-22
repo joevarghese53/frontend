@@ -13,7 +13,7 @@ const Footer = () => {
       <div className="footer-row">
         <div className="footer-section">
           <h3>CUSTOMER SERVICE</h3>
-          <Link href="/ContactUs"> Contact Us</Link>
+          <Link href="/contactUs"> Contact Us</Link>
           <Link href="/MyOrders"> Track Order</Link>
           <Link href="/ContactUs"> Return policy</Link>
           <Link href="/ContactUs"> Cancellation policy</Link>

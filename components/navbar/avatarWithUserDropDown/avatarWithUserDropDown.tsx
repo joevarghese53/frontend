@@ -79,9 +79,11 @@ const AvatarWithUserDropDown = ({ name = "Joe Varghese" }) => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <UserIcon />
-            Contact Us
+          <DropdownMenuItem asChild>
+            <Link href="/contactUs">
+              <UserIcon />
+              Contact Us
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

@@ -43,7 +43,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           icon: "!flex !items-center !justify-center !mr-0 !shrink-0",
           content: "!flex !flex-col !flex-none !items-start !text-left",
           title: "!text-center",
-          description: "!text-center",
+          description: "!text-center !text-white/70",
         },
       }}
       {...props}
