@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState, type FormEvent } from "react"
+import { useEffect, useRef, useState, type FormEvent } from "react"
 import { toast } from "sonner"
 import { AdminPageLayout } from "@/components/admin/adminPageLayout"
 import { getAdminErrorMessage } from "@/components/admin/adminUtils"
@@ -40,12 +40,33 @@ type ProductImageField =
   | "frontDesign"
   | "backDesign"
 
+type GalleryFile = {
+  file: File
+  previewUrl: string
+}
+
 const PRODUCT_IMAGE_FIELDS: ProductImageField[] = [
   "frontImage",
   "backImage",
   "frontDesign",
   "backDesign",
 ]
+
+const appendGalleryFiles = (
+  currentFiles: GalleryFile[],
+  selectedFiles: File[],
+  previewUrls: Set<string>
+): GalleryFile[] | null => {
+  if (currentFiles.length + selectedFiles.length > 10) return null
+  return [
+    ...currentFiles,
+    ...selectedFiles.map((file) => {
+      const previewUrl = URL.createObjectURL(file)
+      previewUrls.add(previewUrl)
+      return { file, previewUrl }
+    }),
+  ]
+}
 
 const EMPTY_NEW_PRODUCT: NewProductForm = {
   name: "",
@@ -89,17 +110,25 @@ export default function AdminProductsPage() {
   const [newProductFiles, setNewProductFiles] = useState<
     Partial<Record<ProductImageField, File>>
   >({})
-  const [newGalleryFiles, setNewGalleryFiles] = useState<File[]>([])
+  const [newGalleryFiles, setNewGalleryFiles] = useState<GalleryFile[]>([])
   const [newProductPreviewUrls, setNewProductPreviewUrls] = useState<
     Partial<Record<ProductImageField, string>>
   >({})
   const [imageFiles, setImageFiles] = useState<
     Partial<Record<ProductImageField, File>>
   >({})
-  const [galleryFiles, setGalleryFiles] = useState<File[]>([])
+  const [galleryFiles, setGalleryFiles] = useState<GalleryFile[]>([])
   const [imagePreviewUrls, setImagePreviewUrls] = useState<
     Partial<Record<ProductImageField, string>>
   >({})
+  const galleryPreviewUrls = useRef(new Set<string>())
+
+  const releaseGalleryPreviews = (files: GalleryFile[]) => {
+    files.forEach(({ previewUrl }) => {
+      URL.revokeObjectURL(previewUrl)
+      galleryPreviewUrls.current.delete(previewUrl)
+    })
+  }
 
   useEffect(() => {
     return () => {
@@ -116,6 +145,14 @@ export default function AdminProductsPage() {
       })
     }
   }, [newProductPreviewUrls])
+
+  useEffect(() => {
+    const previewUrls = galleryPreviewUrls.current
+    return () => {
+      previewUrls.forEach((previewUrl) => URL.revokeObjectURL(previewUrl))
+      previewUrls.clear()
+    }
+  }, [])
 
   const uploadProductImages = async (
     files: Partial<Record<ProductImageField, File>>,
@@ -172,7 +209,7 @@ export default function AdminProductsPage() {
     try {
       const { imageUrls, galleryUrls } = await uploadProductImages(
         newProductFiles,
-        newGalleryFiles
+        newGalleryFiles.map(({ file }) => file)
       )
       PRODUCT_IMAGE_FIELDS.forEach((field) => {
         const imageUrl = imageUrls[field]
@@ -187,6 +224,7 @@ export default function AdminProductsPage() {
       setIsCreateFormOpen(false)
       setNewProduct(EMPTY_NEW_PRODUCT)
       setNewProductFiles({})
+      releaseGalleryPreviews(newGalleryFiles)
       setNewGalleryFiles([])
       setNewProductPreviewUrls({})
     } catch (createError) {
@@ -229,7 +267,7 @@ export default function AdminProductsPage() {
     try {
       const { imageUrls, galleryUrls } = await uploadProductImages(
         imageFiles,
-        galleryFiles
+        galleryFiles.map(({ file }) => file)
       )
       PRODUCT_IMAGE_FIELDS.forEach((field) => {
         const imageUrl = imageUrls[field]
@@ -249,6 +287,7 @@ export default function AdminProductsPage() {
       toast.success("Product details updated.")
       setEditingProduct(null)
       setImageFiles({})
+      releaseGalleryPreviews(galleryFiles)
       setGalleryFiles([])
       setImagePreviewUrls({})
     } catch (updateError) {
@@ -276,6 +315,7 @@ export default function AdminProductsPage() {
               if (isCreateFormOpen) {
                 setNewProduct(EMPTY_NEW_PRODUCT)
                 setNewProductFiles({})
+                releaseGalleryPreviews(newGalleryFiles)
                 setNewGalleryFiles([])
                 setNewProductPreviewUrls({})
               }
@@ -476,23 +516,41 @@ export default function AdminProductsPage() {
                 multiple
                 accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                 onChange={(event) => {
-                  const files = Array.from(event.target.files ?? [])
-                  if (files.length > 10) {
+                  const files = Array.from(event.currentTarget.files ?? [])
+                  event.currentTarget.value = ""
+                  const nextFiles = appendGalleryFiles(
+                    newGalleryFiles,
+                    files,
+                    galleryPreviewUrls.current
+                  )
+                  if (!nextFiles) {
                     toast.error("Choose no more than 10 additional images.")
-                    event.currentTarget.value = ""
                     return
                   }
-                  setNewGalleryFiles(files)
+                  setNewGalleryFiles(nextFiles)
                 }}
                 className="h-10 w-fit rounded-xl border border-black/50 px-3 py-1.5"
               />
               <p className="text-xs text-zinc-500">
-                You can select up to 10 images.
+                Select up to 10 images, in one or more batches.
               </p>
               {newGalleryFiles.length > 0 && (
-                <ul className="list-inside list-disc text-xs text-zinc-500">
-                  {newGalleryFiles.map((file, index) => (
-                    <li key={`${file.name}-${index}`}>{file.name}</li>
+                <ul className="flex flex-wrap gap-3">
+                  {newGalleryFiles.map(({ file, previewUrl }, index) => (
+                    <li
+                      key={`${file.name}-${index}`}
+                      className="flex flex-col gap-1 text-xs text-zinc-500"
+                    >
+                      <Image
+                        src={previewUrl}
+                        alt={`Selected gallery image ${index + 1}`}
+                        width={128}
+                        height={128}
+                        unoptimized
+                        className="h-24 w-24 rounded-lg object-cover"
+                      />
+                      <span className="max-w-32 truncate">{file.name}</span>
+                    </li>
                   ))}
                 </ul>
               )}
@@ -567,6 +625,7 @@ export default function AdminProductsPage() {
                               : toProductForm(product)
                           )
                           setImageFiles({})
+                          releaseGalleryPreviews(galleryFiles)
                           setGalleryFiles([])
                           setImagePreviewUrls({})
                         }}
@@ -805,22 +864,44 @@ export default function AdminProductsPage() {
                           multiple
                           accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                           onChange={(event) => {
-                            const files = Array.from(event.target.files ?? [])
-                            if (files.length > 10) {
+                            const files = Array.from(
+                              event.currentTarget.files ?? []
+                            )
+                            event.currentTarget.value = ""
+                            const nextFiles = appendGalleryFiles(
+                              galleryFiles,
+                              files,
+                              galleryPreviewUrls.current
+                            )
+                            if (!nextFiles) {
                               toast.error(
                                 "Choose no more than 10 additional images."
                               )
-                              event.currentTarget.value = ""
                               return
                             }
-                            setGalleryFiles(files)
+                            setGalleryFiles(nextFiles)
                           }}
                           className="h-10 w-fit rounded-xl border border-black/50 px-3 py-1.5"
                         />
                         {galleryFiles.length > 0 && (
-                          <ul className="list-inside list-disc text-xs text-zinc-500">
-                            {galleryFiles.map((file, index) => (
-                              <li key={`${file.name}-${index}`}>{file.name}</li>
+                          <ul className="flex flex-wrap gap-3">
+                            {galleryFiles.map(({ file, previewUrl }, index) => (
+                              <li
+                                key={`${file.name}-${index}`}
+                                className="flex flex-col gap-1 text-xs text-zinc-500"
+                              >
+                                <Image
+                                  src={previewUrl}
+                                  alt={`Selected gallery image ${index + 1}`}
+                                  width={128}
+                                  height={128}
+                                  unoptimized
+                                  className="h-24 w-24 rounded-lg object-cover"
+                                />
+                                <span className="max-w-32 truncate">
+                                  {file.name}
+                                </span>
+                              </li>
                             ))}
                           </ul>
                         )}
