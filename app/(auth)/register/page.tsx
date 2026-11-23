@@ -1,5 +1,5 @@
-import { BrandPanel } from "@/components/login/brandPanel"
-import { RegisterForm } from "@/components/login/registerForm"
+import { BrandPanel } from "@/components/auth/brandPanel"
+import { RegisterForm } from "@/components/auth/registerForm"
 
 export default function Page() {
   return (

@@ -288,64 +288,64 @@ function RegisterForm() {
                   </button>
                 </div>
                 <div
-                    className="mt-3"
-                    role="status"
-                    aria-live="polite"
-                    aria-label={`Password strength: ${
-                      passwordStrength === 5
-                        ? "strong"
-                        : passwordStrength >= 3
-                          ? "medium"
-                          : passwordStrength > 0
-                            ? "weak"
-                            : "not set"
-                    }`}
+                  className="mt-3"
+                  role="status"
+                  aria-live="polite"
+                  aria-label={`Password strength: ${
+                    passwordStrength === 5
+                      ? "strong"
+                      : passwordStrength >= 3
+                        ? "medium"
+                        : passwordStrength > 0
+                          ? "weak"
+                          : "not set"
+                  }`}
                 >
-                    <div className="mb-2 flex gap-1.5" aria-hidden="true">
-                      {passwordRequirements.map((requirement, index) => (
-                        <span
-                          key={requirement.label}
-                          className={`h-1.5 flex-1 rounded-full ${
-                            index < passwordStrength
-                              ? passwordStrength === 5
-                                ? "bg-green-600"
-                                : passwordStrength >= 3
-                                  ? "bg-amber-500"
-                                  : "bg-red-500"
-                              : "bg-neutral-200 dark:bg-neutral-700"
+                  <div className="mb-2 flex gap-1.5" aria-hidden="true">
+                    {passwordRequirements.map((requirement, index) => (
+                      <span
+                        key={requirement.label}
+                        className={`h-1.5 flex-1 rounded-full ${
+                          index < passwordStrength
+                            ? passwordStrength === 5
+                              ? "bg-green-600"
+                              : passwordStrength >= 3
+                                ? "bg-amber-500"
+                                : "bg-red-500"
+                            : "bg-neutral-200 dark:bg-neutral-700"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <p className="mb-2 text-xs text-neutral-500">
+                    {passwordStrength === 5
+                      ? "Strong password"
+                      : passwordStrength >= 3
+                        ? "Medium password"
+                        : passwordStrength > 0
+                          ? "Weak password"
+                          : "Use a strong password"}
+                  </p>
+                  <ul className="grid grid-cols-1 gap-1 text-xs sm:grid-cols-2">
+                    {passwordRequirements.map((requirement) => (
+                      <li
+                        key={requirement.label}
+                        className={`flex items-center gap-1.5 ${
+                          requirement.met
+                            ? "text-green-700 dark:text-green-400"
+                            : "text-neutral-500"
+                        }`}
+                      >
+                        <Check
+                          aria-hidden="true"
+                          className={`h-3.5 w-3.5 ${
+                            requirement.met ? "opacity-100" : "opacity-30"
                           }`}
                         />
-                      ))}
-                    </div>
-                    <p className="mb-2 text-xs text-neutral-500">
-                      {passwordStrength === 5
-                        ? "Strong password"
-                        : passwordStrength >= 3
-                          ? "Medium password"
-                          : passwordStrength > 0
-                            ? "Weak password"
-                            : "Use a strong password"}
-                    </p>
-                    <ul className="grid grid-cols-1 gap-1 text-xs sm:grid-cols-2">
-                      {passwordRequirements.map((requirement) => (
-                        <li
-                          key={requirement.label}
-                          className={`flex items-center gap-1.5 ${
-                            requirement.met
-                              ? "text-green-700 dark:text-green-400"
-                              : "text-neutral-500"
-                          }`}
-                        >
-                          <Check
-                            aria-hidden="true"
-                            className={`h-3.5 w-3.5 ${
-                              requirement.met ? "opacity-100" : "opacity-30"
-                            }`}
-                          />
-                          {requirement.label}
-                        </li>
-                      ))}
-                    </ul>
+                        {requirement.label}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 

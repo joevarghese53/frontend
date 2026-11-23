@@ -1,5 +1,5 @@
-import { BrandPanel } from "@/components/login/brandPanel"
-import { LoginForm } from "@/components/login/loginForm"
+import { BrandPanel } from "@/components/auth/brandPanel"
+import { LoginForm } from "@/components/auth/loginForm"
 
 export default function Page() {
   return (
