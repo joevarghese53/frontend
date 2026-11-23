@@ -24,8 +24,8 @@ const Footer = () => {
 
         <div className="footer-section">
           <h3>COMPANY</h3>
-          <Link href="/AboutUs"> About Us</Link>
-          <Link href="/Hiring"> We&apos;re Hiring</Link>
+          <Link href="/about-us"> About Us</Link>
+          <Link href="/hiring"> We&apos;re Hiring</Link>
           <Link href="/terms-and-conditions"> Terms & Conditions</Link>
           <Link href="/privacy-policy"> Privacy Policy</Link>
         </div>
@@ -33,7 +33,6 @@ const Footer = () => {
         <div className="footer-section">
           <h3>CONNECT WITH US</h3>
           <div style={{ display: "flex", gap: "10px" }}>
-            <AiFillFacebook size={24} />
             <AiFillInstagram size={24} />
           </div>
         </div>
