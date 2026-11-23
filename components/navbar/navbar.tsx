@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { Menu, X } from "lucide-react"
 import AvatarWithUserDropDown from "./avatarWithUserDropDown/avatarWithUserDropDown"
 import { useSelector } from "react-redux"
@@ -16,7 +16,6 @@ const links = [
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const { userInfo } = useSelector((state: RootState) => state.auth)
-  console.log("userInfo", userInfo)
 
   return (
     <nav className="fixed top-6 left-1/2 z-50 w-[90%] max-w-6xl -translate-x-1/2">

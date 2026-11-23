@@ -1,5 +1,5 @@
 "use client"
-import { useState, type Dispatch, type FormEvent, type SetStateAction } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import { toast } from "sonner"
@@ -25,7 +25,6 @@ const CProductPage = () => {
         productId,
         { skip: !productId }
     )
-    console.log("Product details:", product)
     const { data: itemExistCheck } = useCheckItemInWishlistQuery(productId, {
         skip: !productId,
     })
@@ -37,8 +36,6 @@ const CProductPage = () => {
     const [qty, setQty] = useState(1)
     const [selectedSize, setSelectedSize] = useState<string | null>(null)
     const [selectedImage, setSelectedImage] = useState<string | null>(null)
-    const [rating, setRating] = useState(5)
-    const [comment, setComment] = useState("")
     const displayImage = selectedImage ?? product?.frontImage
 
     const handleAddToCart = async () => {

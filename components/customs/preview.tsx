@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 
 const Preview = ({ color, category, side, setSide, frontImageUrl, backImageUrl }: { color: string; category: string; side: "front" | "back"; setSide: Dispatch<SetStateAction<"front" | "back">>; frontImageUrl: string | null; backImageUrl: string | null }) => {
@@ -32,14 +33,22 @@ const Preview = ({ color, category, side, setSide, frontImageUrl, backImageUrl }
 
       <div className="h-120 rounded-3xl flex items-center justify-center bg-[radial-gradient(circle_at_50%_30%,#25c7e9_0%,#1d889b_35%,#236477_68%,#173d4b_100%)]">
         {side === "front" && (
-          <img
+          <Image
             src={frontImage}
+            alt={`${color} ${category} shirt, front view`}
+            width={720}
+            height={720}
+            unoptimized={Boolean(frontImageUrl)}
             className="h-[90%] object-contain"
           />
         )}
         {side === "back" && (
-          <img
+          <Image
             src={backImage}
+            alt={`${color} ${category} shirt, back view`}
+            width={720}
+            height={720}
+            unoptimized={Boolean(backImageUrl)}
             className="h-[90%] object-contain"
           />
         )}

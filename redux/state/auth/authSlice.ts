@@ -1,6 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
-const initialState = {
+export type UserInfo = Record<string, unknown> & {
+  accessToken?: string
+}
+
+const initialState: { userInfo: UserInfo | null } = {
   userInfo: null as null | Record<string, unknown>,
 }
 
@@ -8,24 +12,15 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setCredentials: (state, action) => {
-      state.userInfo = action.payload;
-      if (typeof window !== "undefined") {
-        localStorage.setItem("userInfo", JSON.stringify(action.payload))
-      }
+    setCredentials: (state, action: PayloadAction<UserInfo>) => {
+      state.userInfo = action.payload
     },
     logout: (state) => {
       state.userInfo = null
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("userInfo")
-      }
     },
-    setAccessToken: (state, action) => {
+    setAccessToken: (state, action: PayloadAction<string>) => {
       if (!state.userInfo) return
-      ;(state.userInfo as Record<string, unknown>).accessToken = action.payload
-      if (typeof window !== "undefined") {
-        localStorage.setItem("userInfo", JSON.stringify(state.userInfo))
-      }
+      state.userInfo.accessToken = action.payload
     },
   },
 })

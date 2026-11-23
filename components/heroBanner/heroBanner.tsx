@@ -31,6 +31,12 @@ export type MediaItem =
 
 const HeroBanner = () => {
   const { data: categories } = useFetchCategoriesQuery()
+  const categoryPage = (index: number) => {
+    const categoryId = categories?.[index]?._id
+    return categoryId
+      ? `/products?category=${encodeURIComponent(categoryId)}`
+      : "/products"
+  }
 
   const desktopMedia: MediaItem[] = [
     // { type: 'video', url: video1, alt: "video1" },
@@ -38,17 +44,17 @@ const HeroBanner = () => {
     {
       type: "image",
       url: slide2,
-      page: `/products?category=${categories ? categories?.[0]?._id : null}`,
+      page: categoryPage(0),
     },
     {
       type: "image",
       url: slide3,
-      page: `/products?category=${categories ? categories?.[1]?._id : null}`,
+      page: categoryPage(1),
     },
     {
       type: "image",
       url: slide4,
-      page: `/products?category=${categories ? categories?.[2]?._id : null}`,
+      page: categoryPage(2),
     },
     { type: "image", url: slide5, page: "/customs" },
     { type: "image", url: slide6, page: "/customs" },
@@ -59,17 +65,17 @@ const HeroBanner = () => {
     {
       type: "image",
       url: mslide2,
-      page: `/products?category=${categories ? categories?.[0]?._id : null}`,
+      page: categoryPage(0),
     },
     {
       type: "image",
       url: mslide3,
-      page: `/products?category=${categories ? categories?.[1]?._id : null}`,
+      page: categoryPage(1),
     },
     {
       type: "image",
       url: mslide4,
-      page: `/products?category=${categories ? categories?.[2]?._id : null}`,
+      page: categoryPage(2),
     },
     { type: "image", url: mslide5, page: "/customs" },
     { type: "image", url: mslide6, page: "/customs" },

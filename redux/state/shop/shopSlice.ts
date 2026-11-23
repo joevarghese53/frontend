@@ -22,7 +22,6 @@ const shopSlice = createSlice({
     },
     setPriceRange: (state, action) => {
       state.priceRange = action.payload;
-      console.log(state.priceRange);
     },
     resetFilters: (state) => {
       state.checked = [];

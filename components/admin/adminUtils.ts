@@ -38,15 +38,19 @@ export function isAdminUser(value: unknown): boolean {
     candidate = candidate.user ?? candidate.profile ?? candidate
   }
   if (!isRecord(candidate)) return false
-  if (candidate.isAdmin === true) return true
-
-  if (typeof candidate.accessToken === "string") {
-    try {
-      if (decodeJwt(candidate.accessToken).isAdmin === true) return true
-    } catch {
-      return false
-    }
+  if (
+    candidate.isAdmin === true ||
+    (typeof candidate.role === "string" &&
+      candidate.role.toLowerCase() === "admin")
+  ) {
+    return true
   }
 
-  return false
+  if (typeof candidate.accessToken !== "string") return false
+
+  try {
+    return decodeJwt(candidate.accessToken).isAdmin === true
+  } catch {
+    return false
+  }
 }

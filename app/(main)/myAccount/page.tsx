@@ -297,9 +297,9 @@ export default function MyAccountPage() {
   const name = fetchedProfile.name ?? savedProfile.name ?? ""
   const email = fetchedProfile.email ?? savedProfile.email ?? ""
   const isAdmin =
-    fetchedProfile.isAdmin === true ||
-    savedProfile.isAdmin === true ||
-    isAdminUser(userInfo)
+    !isLoading &&
+    !error &&
+    (isAdminUser(profileData) || isAdminUser(userInfo))
 
   if (!userInfo) {
     return (

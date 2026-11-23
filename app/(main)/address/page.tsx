@@ -740,14 +740,15 @@ const AddressPage = () => {
                     autoComplete="postal-code"
                     placeholder="6-digit postal code"
                     value={newAddress.postalCode}
-                    onChange={(event) =>
+                    onChange={(event) => {
+                      const postalCode = event.currentTarget.value
+                        .replace(/\D/g, "")
+                        .slice(0, 6)
                       setNewAddress((currentAddress) => ({
                         ...currentAddress,
-                        postalCode: event.currentTarget.value
-                          .replace(/\D/g, "")
-                          .slice(0, 6),
+                        postalCode,
                       }))
-                    }
+                    }}
                     pattern="[0-9]{6}"
                     title="Enter a 6-digit postal code."
                     required
@@ -783,14 +784,15 @@ const AddressPage = () => {
                     inputMode="numeric"
                     placeholder="10-digit contact number"
                     value={newAddress.phoneNumber}
-                    onChange={(event) =>
+                    onChange={(event) => {
+                      const phoneNumber = event.currentTarget.value
+                        .replace(/\D/g, "")
+                        .slice(0, 10)
                       setNewAddress((currentAddress) => ({
                         ...currentAddress,
-                        phoneNumber: event.currentTarget.value
-                          .replace(/\D/g, "")
-                          .slice(0, 10),
+                        phoneNumber,
                       }))
-                    }
+                    }}
                     pattern="[6-9][0-9]{9}"
                     title="Enter a valid 10-digit Indian phone number."
                     required

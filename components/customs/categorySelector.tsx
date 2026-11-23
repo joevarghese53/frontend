@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const CategorySelector = ({ category, setCategory }: { category: string; setCategory: (category: string) => void }) => {
 
     return (

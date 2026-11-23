@@ -15,7 +15,6 @@ export function MyCreations({
   products,
   isLoading = false,
 }: MyCreationsProps) {
-  console.log("MyCreations products:", products);
   const router = useRouter();
 
   return (

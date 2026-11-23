@@ -6,8 +6,6 @@ const SizeSelector = ({ onSizeSelect, category }) => {
     const [showSizeChart, setShowSizeChart] = useState(false);
     const [selectedSize, setSelectedSize] = useState(null);
 
-    console.log("sizeselector", category);
-
     const toggleSizeChart = () => {
         setShowSizeChart(!showSizeChart);
     };

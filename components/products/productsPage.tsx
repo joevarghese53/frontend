@@ -83,7 +83,16 @@ export function ProductsPage({
 
   return (
     <div className="mx-auto mt-30 min-h-svh max-w-7xl px-5 pt-12 pb-20 sm:px-8 lg:px-12">
-
+      <header className="mb-8">
+        <h1 className="text-3xl font-semibold tracking-tight">
+          {categoryId && selectedCategoryName
+            ? selectedCategoryName
+            : "All products"}
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Browse and filter the collection to find your next favorite.
+        </p>
+      </header>
       <section
         aria-label="Product filters"
         className="mb-8 grid gap-4 rounded-2xl border border-zinc-200 p-4 sm:grid-cols-2 lg:grid-cols-[minmax(220px,1fr)_minmax(180px,0.7fr)_minmax(170px,0.6fr)] dark:border-zinc-800"

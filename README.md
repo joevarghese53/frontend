@@ -1,21 +1,18 @@
-# Next.js template
+# Flow State storefront
 
-This is a Next.js template with shadcn/ui.
+The Flow State storefront is built with Next.js, React, TypeScript, Tailwind CSS,
+and Redux Toolkit Query.
 
-## Adding components
+## Setup
 
-To add components to your app, run the following command:
+1. Install dependencies with `pnpm install`.
+2. Create `.env.local` and set `NEXT_PUBLIC_BASE_URL` to the backend API base
+   URL. See `.env.example`.
+3. Run `pnpm dev` to start the development server.
 
-```bash
-npx shadcn@latest add button
-```
+## Checks
 
-This will place the ui components in the `components` directory.
-
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
-```
+- `pnpm lint` runs ESLint.
+- `pnpm typecheck` runs TypeScript without emitting files.
+- `pnpm test` runs the unit tests once.
+- `pnpm build` creates the production build.

@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { AiFillInstagram, AiFillFacebook } from "react-icons/ai"
+import { AiFillInstagram } from "react-icons/ai"
 import phonepe from "../../public/images/phonepe.png"
 import "./footer.css"
 

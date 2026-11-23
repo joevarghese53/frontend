@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from '../ui/button'
 import { Shirt } from 'lucide-react'
+import Image from "next/image"
 
 type FinalProductProps = {
   color: string;
@@ -32,8 +33,12 @@ const FinalProduct = ({ color, category, frontImageUrl, backImageUrl, onRemoveFr
                     </div>
 
                     <div className="flex justify-center items-center mb-8 min-h-87.5 bg-[radial-gradient(circle_at_50%_30%,#25c7e9_0%,#1d889b_35%,#236477_68%,#173d4b_100%)] rounded-3xl">
-                        <img
+                        <Image
                             src={frontImage}
+                            alt={`${color} ${category} shirt, front view`}
+                            width={640}
+                            height={640}
+                            unoptimized={Boolean(frontImageUrl)}
                             className="max-h-80 object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.2)]"
                         />
                     </div>
@@ -57,8 +62,12 @@ const FinalProduct = ({ color, category, frontImageUrl, backImageUrl, onRemoveFr
                     </div>
 
                     <div className="flex justify-center items-center mb-8 min-h-87.5 bg-[radial-gradient(circle_at_50%_30%,#25c7e9_0%,#1d889b_35%,#236477_68%,#173d4b_100%)] rounded-3xl">
-                        <img
+                        <Image
                             src={backImage}
+                            alt={`${color} ${category} shirt, back view`}
+                            width={640}
+                            height={640}
+                            unoptimized={Boolean(backImageUrl)}
                             className="max-h-80 object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.2)]"
                         />
                     </div>

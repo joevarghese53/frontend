@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import Script from "next/script"
 import { useSearchParams } from "next/navigation"
 import { toast } from "sonner"
@@ -55,7 +55,7 @@ function getErrorMessage(error: unknown): string {
   return "An unexpected error occurred."
 }
 
-const PaymentPage = () => {
+function PaymentContent() {
   const searchParams = useSearchParams()
   const orderId = searchParams.get("orderId")
   const [isPolling, setIsPolling] = useState(false)
@@ -76,7 +76,6 @@ const PaymentPage = () => {
     skip: !orderId,
   })
 
-  console.log("Order details:", orderDetails)
   const stopPolling = () => {
     pollingActiveRef.current = false
     if (pollingTimeoutRef.current) {
@@ -323,4 +322,17 @@ const PaymentPage = () => {
   )
 }
 
-export default PaymentPage
+export default function PaymentPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="payment-loading-container" role="status">
+          <div className="payment-loading-spinner" />
+          <p>Loading payment page…</p>
+        </div>
+      }
+    >
+      <PaymentContent />
+    </Suspense>
+  )
+}

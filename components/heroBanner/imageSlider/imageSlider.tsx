@@ -66,28 +66,31 @@ export default function ImageSlider({ media }: Props) {
       <div style={{ display: "flex", overflow: "hidden", height: "100%" }}>
         <div style={sliderTrackStyle}>
           {media.map(({ type, url, page }, index) => (
-            <div key={index} style={slideStyle}>
+            <div
+              key={typeof url === "string" ? url : url.src}
+              style={slideStyle}
+            >
               {type === "image" ? (
                 <Image
                   src={url}
-                  alt="slides"
+                  alt={`Collection slide ${index + 1}`}
                   fill
                   sizes="(max-width: 1500px) 100vw, 1500px"
                   onClick={() => handleImageClick(page)}
                   aria-hidden={mediaIndex !== index}
                   className="img-slider-img"
-                  priority
-                  loading="eager"
+                  priority={index === 0}
                 />
               ) : (
                 <video
-                  src=""
+                  src={typeof url === "string" ? url : ""}
                   onClick={() => handleImageClick(page)}
                   aria-hidden={mediaIndex !== index}
                   className="img-slider-video"
                   autoPlay
                   muted
                   loop
+                  playsInline
                 />
               )}
             </div>
@@ -96,6 +99,7 @@ export default function ImageSlider({ media }: Props) {
       </div>
 
       <button
+        type="button"
         onClick={showPrevMedia}
         className="img-slider-btn"
         aria-label="View Previous Media"
@@ -104,6 +108,7 @@ export default function ImageSlider({ media }: Props) {
       </button>
 
       <button
+        type="button"
         onClick={showNextMedia}
         className="img-slider-btn"
         style={{ right: 0 }}

@@ -169,7 +169,6 @@ export default function Page() {
         formData
       ).unwrap();
 
-      console.log(response);
 
       // Redirect to the product page
       router.push(`/cproduct/${response._id}`);

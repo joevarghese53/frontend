@@ -19,7 +19,7 @@ const PromptInput = ({ prompt, setPrompt }: { prompt: string; setPrompt: (prompt
         </h2>
 
         <p className="text-sm text-muted-foreground mt-1">
-          Describe what you'd like to wear.
+          Describe what you&apos;d like to wear.
         </p>
       </div>
 

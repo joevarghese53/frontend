@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useSyncExternalStore } from "react"
 import { useRouter } from "next/navigation"
 import { useDispatch, useSelector } from "react-redux"
 import { isAdminUser, isRecord } from "@/components/admin/adminUtils"
@@ -9,38 +9,61 @@ import { useGetProfileQuery } from "@/redux/api/usersApiSlice"
 import { setCredentials } from "@/redux/state/auth/authSlice"
 import type { AppDispatch, RootState } from "@/redux/store"
 
+const subscribe = () => () => {}
+
 export function AdminRouteGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const userInfo = useSelector((state: RootState) => state.auth.userInfo)
-  const isAdmin = isAdminUser(userInfo)
-  const { data: profile, isLoading: isProfileLoading } = useGetProfileQuery(
-    undefined,
-    { skip: !userInfo || isAdmin }
-  )
-  const isAuthorized = isAdmin || isAdminUser(profile)
+  const isHydrated = useSyncExternalStore(subscribe, () => true, () => false)
+  const {
+    currentData: profile,
+    isLoading: isProfileLoading,
+    error: profileError,
+  } = useGetProfileQuery(undefined, {
+    skip: !isHydrated || !userInfo,
+  })
+  const isAuthenticated = profile !== undefined && !profileError
+  const isAuthorized =
+    isAuthenticated && (isAdminUser(profile) || isAdminUser(userInfo))
 
   useEffect(() => {
+    if (!isHydrated) return
+
     if (!userInfo) {
-      const storedUserInfo = window.localStorage.getItem("userInfo")
-      if (storedUserInfo) {
-        try {
+      try {
+        const storedUserInfo = window.localStorage.getItem("userInfo")
+        if (storedUserInfo) {
           const parsedUserInfo: unknown = JSON.parse(storedUserInfo)
           if (isRecord(parsedUserInfo)) {
             dispatch(setCredentials(parsedUserInfo))
             return
           }
-        } catch {
           window.localStorage.removeItem("userInfo")
         }
+      } catch (error) {
+        console.error("Could not restore admin authentication state:", error)
       }
 
       router.replace("/login")
       return
     }
 
-    if (!isAuthorized && !isProfileLoading) router.replace("/myAccount")
-  }, [dispatch, isProfileLoading, isAuthorized, router, userInfo])
+    if (isProfileLoading) return
+    if (profileError) {
+      router.replace("/login")
+    } else if (!isAuthorized) {
+      router.replace("/myAccount")
+    }
+  }, [
+    dispatch,
+    isAuthorized,
+    isHydrated,
+    isProfileLoading,
+    profileError,
+    router,
+    userInfo,
+  ])
 
   if (isAuthorized) return children
 

@@ -103,7 +103,6 @@ function getNextAction(order: CreateOrderResponse) {
 
 export default function AdminOrdersPage() {
   const { data: orders, isLoading, error, refetch } = useGetAllOrdersQuery()
-  console.log("orders", orders)
   const [statusFilter, setStatusFilter] = useState<OrderStatusFilter>("all")
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [confirmOrder] = useConfirmOrderMutation()

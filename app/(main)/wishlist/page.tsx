@@ -1,14 +1,11 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { useSelector } from "react-redux"
 import { Heart, ShoppingBag } from "lucide-react"
-import { toast } from "sonner"
 import ErrorCard from "@/components/errorCard/errorCard"
 import {
   useGetWishlistQuery,
-  useRemoveFromWishlistMutation,
 } from "@/redux/api/wishlistApiSlice"
 import type { RootState } from "@/redux/store"
 import "./page.css"
@@ -46,18 +43,6 @@ export default function WishlistPage() {
     error,
     refetch,
   } = useGetWishlistQuery(undefined, { skip: !userInfo })
-  const [removeFromWishlist, { isLoading: isRemoving }] =
-    useRemoveFromWishlistMutation()
-
-  const handleRemove = async (productId: string) => {
-    try {
-      await removeFromWishlist(productId).unwrap()
-      toast.success("Removed from wishlist.")
-    } catch (removeError) {
-      toast.error(`Could not remove item: ${getErrorMessage(removeError)}`)
-    }
-  }
-
   if (!userInfo) {
     return (
       <div className="wishlist-page">

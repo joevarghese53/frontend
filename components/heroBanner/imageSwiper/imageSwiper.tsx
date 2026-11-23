@@ -31,17 +31,19 @@ const ImageSwiper = ({ media }: Props) => {
         className="image-swiper"
       >
         {media.map(({ type, url, page }, index) => (
-          <SwiperSlide key={index} className="image-swiper-slide">
+          <SwiperSlide
+            key={typeof url === "string" ? url : url.src}
+            className="image-swiper-slide"
+          >
             {type === "image" ? (
               <Image
                 src={url}
-                alt="slides"
+                alt={`Collection slide ${index + 1}`}
                 fill
                 sizes="(max-width: 768px) 100vw, 1500px"
                 className="img-swiper-img"
                 onClick={() => handleImageClick(page)}
-                priority
-                loading="eager"
+                priority={index === 0}
               />
             ) : (
               <video

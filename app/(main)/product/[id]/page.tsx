@@ -65,7 +65,6 @@ const ProductPage = () => {
     const displayImage = selectedImage ?? product?.frontImage
 
     const handleAddToCart = async () => {
-        console.log("Add to Cart clicked")
         if (!userInfo) {
             toast.info("Please login to continue.")
             return
@@ -90,7 +89,6 @@ const ProductPage = () => {
             }
 
             await addToCart(cartData).unwrap()
-            console.log("Added to cart:", cartData)
             toast.success(`${qty} ${product.name} added to the cart.`)
         } catch (error) {
             toast.error(`Error: ${error}`)
