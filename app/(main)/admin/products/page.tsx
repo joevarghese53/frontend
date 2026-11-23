@@ -268,7 +268,7 @@ export default function AdminProductsPage() {
           <Button
             type="button"
             variant="outline"
-            className="rounded-xl"
+            className="rounded-xl border-zinc-700"
             aria-expanded={isCreateFormOpen}
             aria-controls="new-product-form"
             disabled={isCreating || isUploadingImages}
@@ -290,7 +290,7 @@ export default function AdminProductsPage() {
           <form
             id="new-product-form"
             onSubmit={handleCreate}
-            className="mb-8 grid gap-4 rounded-2xl border border-zinc-200 p-5 sm:grid-cols-2 dark:border-zinc-800"
+            className="mb-8 grid gap-4 p-4 rounded-3xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 @apply shadow-[0_4px_20px_3px_#0000005c]"
           >
             <div className="space-y-2">
               <label htmlFor="new-product-name" className="text-sm font-medium">
@@ -306,7 +306,7 @@ export default function AdminProductsPage() {
                     name: event.target.value,
                   }))
                 }
-                className="h-10 rounded-xl px-3"
+                className="h-10 rounded-xl px-3 border border-black/50"
               />
             </div>
             <div className="space-y-2">
@@ -329,7 +329,7 @@ export default function AdminProductsPage() {
                     price: event.target.value,
                   }))
                 }
-                className="h-10 rounded-xl px-3"
+                className="h-10 rounded-xl px-3 border border-black/50"
               />
             </div>
             <div className="space-y-2">
@@ -349,7 +349,7 @@ export default function AdminProductsPage() {
                     category: event.target.value,
                   }))
                 }
-                className="h-10 w-full rounded-xl border border-input bg-transparent px-3 text-sm"
+                className="h-10 w-full rounded-xl border border-black/50 bg-transparent px-3 text-sm"
               >
                 <option value="" disabled>
                   Select a category
@@ -378,7 +378,7 @@ export default function AdminProductsPage() {
                     description: event.target.value,
                   }))
                 }
-                className="min-h-24 rounded-xl"
+                className="min-h-24 rounded-xl border border-black/50"
               />
             </div>
             {(
@@ -404,7 +404,7 @@ export default function AdminProductsPage() {
                       [field]: event.target.value,
                     }))
                   }
-                  className="h-10 rounded-xl px-3"
+                  className="h-10 rounded-xl px-3 border border-black/50"
                 />
               </div>
             ))}
@@ -454,7 +454,7 @@ export default function AdminProductsPage() {
                       return next
                     })
                   }}
-                  className="h-10 w-fit rounded-xl border border-black/20 px-3 py-1.5"
+                  className="h-10 w-fit rounded-xl border border-black/50 px-3 py-1.5"
                 />
                 {newProductFiles[field] && (
                   <p className="text-xs text-zinc-500">
@@ -484,7 +484,7 @@ export default function AdminProductsPage() {
                   }
                   setNewGalleryFiles(files)
                 }}
-                className="h-10 w-fit rounded-xl border border-black/20 px-3 py-1.5"
+                className="h-10 w-fit rounded-xl border border-black/50 px-3 py-1.5"
               />
               <p className="text-xs text-zinc-500">
                 You can select up to 10 images.
@@ -539,9 +539,9 @@ export default function AdminProductsPage() {
           </p>
         ) : (
           <div className="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800">
-            <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <ul className="divide-y divide-zinc-200 dark:divide-zinc-800 flex flex-col gap-2">
               {products.map((product) => (
-                <li key={product._id} className="p-4 sm:px-6">
+                <li key={product._id} className="overflow-hidden rounded-3xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 @apply shadow-[0_4px_20px_3px_#0000005c] p-4 m-2">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                       <Link
@@ -611,7 +611,7 @@ export default function AdminProductsPage() {
                                 : current
                             )
                           }
-                          className="h-10 rounded-xl px-3"
+                          className="h-10 rounded-xl px-3 border border-black/50"
                         />
                       </div>
                       <div className="space-y-2">
@@ -635,7 +635,7 @@ export default function AdminProductsPage() {
                                 : current
                             )
                           }
-                          className="h-10 rounded-xl px-3"
+                          className="h-10 rounded-xl px-3 border border-black/50"
                         />
                       </div>
                       <div className="space-y-2">
@@ -656,7 +656,7 @@ export default function AdminProductsPage() {
                                 : current
                             )
                           }
-                          className="h-10 w-full rounded-xl border border-input bg-transparent px-3 text-sm"
+                          className="h-10 w-full rounded-xl border border-black/50 bg-transparent px-3 text-sm"
                         >
                           <option value="" disabled>
                             Select a category
@@ -688,7 +688,7 @@ export default function AdminProductsPage() {
                                 : current
                             )
                           }
-                          className="min-h-24 rounded-xl"
+                          className="min-h-24 rounded-xl *:border border-black/50"
                         />
                       </div>
                       {(
@@ -714,7 +714,7 @@ export default function AdminProductsPage() {
                                   : current
                               )
                             }
-                            className="h-10 rounded-xl px-3"
+                            className="h-10 rounded-xl px-3 border border-black/50"
                           />
                         </div>
                       ))}
@@ -765,7 +765,7 @@ export default function AdminProductsPage() {
                                 return next
                               })
                             }}
-                            className="h-10 w-fit rounded-xl border border-black/20 px-3 py-1.5"
+                            className="h-10 w-fit rounded-xl border border-black/50 px-3 py-1.5"
                           />
                           {imageFiles[field] && (
                             <p className="text-xs text-zinc-500">
@@ -815,7 +815,7 @@ export default function AdminProductsPage() {
                             }
                             setGalleryFiles(files)
                           }}
-                          className="h-10 w-fit rounded-xl border border-black/20 px-3 py-1.5"
+                          className="h-10 w-fit rounded-xl border border-black/50 px-3 py-1.5"
                         />
                         {galleryFiles.length > 0 && (
                           <ul className="list-inside list-disc text-xs text-zinc-500">

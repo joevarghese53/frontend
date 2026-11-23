@@ -76,7 +76,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
 
     deleteProduct: builder.mutation({
       query: (productId) => ({
-        url: `${PRODUCT_URL}/${productId}`,
+        url: `${PRODUCT_URL}/admin/${productId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Products"],
