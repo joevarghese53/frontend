@@ -7,11 +7,7 @@ import { CategoryType } from "@/types/categoryType"
 import { useRefetchHome } from "@/redux/hooks/useRefetchHome"
 
 const ShopByCategory = () => {
-  const {
-    data: categories,
-    isLoading,
-    error,
-  } = useFetchCategoriesQuery()
+  const { data: categories, isLoading, error } = useFetchCategoriesQuery()
 
   const refetchHome = useRefetchHome()
 
@@ -57,6 +53,7 @@ const ShopByCategory = () => {
         {categories?.map((category: CategoryType) => (
           <CategoryCard
             key={category._id}
+            categoryId={category._id}
             title={category.name}
             image={imageMap[category.name]}
           />

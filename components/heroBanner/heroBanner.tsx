@@ -34,45 +34,45 @@ const HeroBanner = () => {
 
   const desktopMedia: MediaItem[] = [
     // { type: 'video', url: video1, alt: "video1" },
-    { type: "image", url: slide1, page: "/Customs" },
+    { type: "image", url: slide1, page: "/customs" },
     {
       type: "image",
       url: slide2,
-      page: `/FilteredProductsMale?category=${categories ? categories?.[0]?._id : null}`,
+      page: `/products?category=${categories ? categories?.[0]?._id : null}`,
     },
     {
       type: "image",
       url: slide3,
-      page: `/FilteredProductsMale?category=${categories ? categories?.[1]?._id : null}`,
+      page: `/products?category=${categories ? categories?.[1]?._id : null}`,
     },
     {
       type: "image",
       url: slide4,
-      page: `/FilteredProductsMale?category=${categories ? categories?.[2]?._id : null}`,
+      page: `/products?category=${categories ? categories?.[2]?._id : null}`,
     },
-    { type: "image", url: slide5, page: "/Customs" },
-    { type: "image", url: slide6, page: "/Customs" },
+    { type: "image", url: slide5, page: "/customs" },
+    { type: "image", url: slide6, page: "/customs" },
   ]
 
   const mobileMedia: MediaItem[] = [
-    { type: "image", url: mslide1, page: "/Customs" },
+    { type: "image", url: mslide1, page: "/customs" },
     {
       type: "image",
       url: mslide2,
-      page: `/FilteredProductsMale?category=${categories ? categories?.[0]?._id : null}`,
+      page: `/products?category=${categories ? categories?.[0]?._id : null}`,
     },
     {
       type: "image",
       url: mslide3,
-      page: `/FilteredProductsMale?category=${categories ? categories?.[1]?._id : null}`,
+      page: `/products?category=${categories ? categories?.[1]?._id : null}`,
     },
     {
       type: "image",
       url: mslide4,
-      page: `/FilteredProductsMale?category=${categories ? categories?.[2]?._id : null}`,
+      page: `/products?category=${categories ? categories?.[2]?._id : null}`,
     },
-    { type: "image", url: mslide5, page: "/Customs" },
-    { type: "image", url: mslide6, page: "/Customs" },
+    { type: "image", url: mslide5, page: "/customs" },
+    { type: "image", url: mslide6, page: "/customs" },
   ]
 
   return (

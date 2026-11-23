@@ -1,16 +1,22 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 
 export default function CategoryCard({
+  categoryId,
   title,
   image,
 }: {
+  categoryId: string
   title: string
   image: string
 }) {
   return (
-    <div className="group relative h-105 min-w-70 shrink-0 cursor-pointer overflow-hidden rounded-3xl">
+    <Link
+      href={`/products?category=${encodeURIComponent(categoryId)}`}
+      className="group relative block h-105 min-w-70 shrink-0 overflow-hidden rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+    >
       {/* Image */}
       <Image
         src={image}
@@ -29,6 +35,6 @@ export default function CategoryCard({
 
         <span className="text-sm text-white/80">Shop Now →</span>
       </div>
-    </div>
+    </Link>
   )
 }
