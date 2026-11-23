@@ -26,8 +26,8 @@ const Footer = () => {
           <h3>COMPANY</h3>
           <Link href="/AboutUs"> About Us</Link>
           <Link href="/Hiring"> We&apos;re Hiring</Link>
-          <Link href="/TandC"> Terms & Conditions</Link>
-          <Link href="/PrivacyPolicy"> Privacy Policy</Link>
+          <Link href="/terms-and-conditions"> Terms & Conditions</Link>
+          <Link href="/privacy-policy"> Privacy Policy</Link>
         </div>
 
         <div className="footer-section">
