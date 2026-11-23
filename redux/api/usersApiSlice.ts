@@ -2,6 +2,11 @@
 import { apiSlice } from "./apiSlice";
 import { USERS_URL } from "../constants";
 
+export type ResetPasswordRequest = {
+  token: string
+  newPassword: string
+}
+
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     initiateRegistration: builder.mutation({
@@ -53,7 +58,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    resetPassword: builder.mutation({
+    resetPassword: builder.mutation<unknown, ResetPasswordRequest>({
       query: (data) => ({
         url: `${USERS_URL}/resetPassword`,
         method: "POST",

@@ -15,9 +15,10 @@ function ForgotPasswordForm() {
 
     try {
       await requestReset({ email: email.trim() }).unwrap()
-      toast.success(
-        "If an account exists for that email, a password reset link will be sent."
-      )
+      toast.success("Success", {
+        description:
+          "Password reset link sent."
+      })
     } catch {
       toast.error("Could not request a password reset. Please try again.")
     }
