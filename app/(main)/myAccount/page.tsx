@@ -124,7 +124,15 @@ const adminLinks = [
   },
 ]
 
-function AdminDashboard({ name }: { name: string }) {
+function AdminDashboard({
+  name,
+  email,
+  userInfo,
+}: {
+  name: string
+  email: string
+  userInfo: NonNullable<RootState["auth"]["userInfo"]>
+}) {
   return (
     <div className="mx-auto min-h-svh max-w-375 px-5 pt-32 pb-20 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-6xl">
@@ -165,6 +173,29 @@ function AdminDashboard({ name }: { name: string }) {
             </Link>
           ))}
         </div>
+
+        <section
+          aria-labelledby="admin-personal-details-heading"
+          className="mt-10 max-w-2xl rounded-3xl border border-zinc-200 p-5 sm:p-8 dark:border-zinc-800"
+        >
+          <div className="mb-6">
+            <h2
+              id="admin-personal-details-heading"
+              className="text-xl font-semibold"
+            >
+              Personal information
+            </h2>
+            <p className="mt-1 text-sm text-zinc-500">
+              Update the name associated with your admin account.
+            </p>
+          </div>
+          <ProfileForm
+            key={`${name}\u0000${email}`}
+            name={name}
+            email={email}
+            userInfo={userInfo}
+          />
+        </section>
       </div>
     </div>
   )
@@ -295,7 +326,7 @@ export default function MyAccountPage() {
   }
 
   if (isAdmin) {
-    return <AdminDashboard name={name} />
+    return <AdminDashboard name={name} email={email} userInfo={userInfo} />
   }
 
   if (isLoading) {
