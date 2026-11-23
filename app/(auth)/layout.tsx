@@ -1,10 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google"
-import "../../globals.css"
+import "../globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
-import Navbar from "@/components/navbar/navbar"
-import Footer from "@/components/footer/footer"
-import { Providers } from "../../providers"
+import { Providers } from "../providers"
 import { Toaster } from "@/components/ui/sonner"
 
 const fontSans = Geist({
@@ -17,7 +15,7 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
-export default function RootLayout({
+export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
