@@ -82,7 +82,7 @@ export function ProductsPage({
       .name
 
   return (
-    <div className="mx-auto mt-[120px] min-h-svh max-w-7xl px-5 pt-12 pb-20 sm:px-8 lg:px-12">
+    <div className="mx-auto mt-30 min-h-svh max-w-7xl px-5 pt-12 pb-20 sm:px-8 lg:px-12">
 
       <section
         aria-label="Product filters"
