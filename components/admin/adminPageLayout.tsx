@@ -1,10 +1,11 @@
 import Link from "next/link"
-import { ArrowLeft, Boxes, Package, Users } from "lucide-react"
+import { ArrowLeft, Boxes, Package, Tags, Users } from "lucide-react"
 
 const adminSections = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/orders", label: "Orders", icon: Package },
   { href: "/admin/products", label: "Products", icon: Boxes },
+  { href: "/admin/categories", label: "Categories", icon: Tags },
 ]
 
 export function AdminPageLayout({

@@ -10,6 +10,7 @@ import {
   Package,
   ShieldCheck,
   ShoppingBag,
+  Tags,
   UserRound,
   Users,
 } from "lucide-react"
@@ -115,6 +116,12 @@ const adminLinks = [
     href: "/admin/products",
     icon: Boxes,
   },
+  {
+    title: "Manage categories",
+    description: "Create, edit, and remove product categories.",
+    href: "/admin/categories",
+    icon: Tags,
+  },
 ]
 
 function AdminDashboard({ name }: { name: string }) {
@@ -134,7 +141,7 @@ function AdminDashboard({ name }: { name: string }) {
           </p>
         </header>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {adminLinks.map(({ title, description, href, icon: Icon }) => (
             <Link
               key={href}
