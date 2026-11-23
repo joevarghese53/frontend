@@ -40,6 +40,7 @@ export type ProductType = {
   price: number
 
   offers?: string
+  returnPolicy?: string
   returnpolicy?: string
 
   createdAt: string

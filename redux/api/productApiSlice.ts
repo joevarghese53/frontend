@@ -3,6 +3,22 @@ import { PRODUCT_URL } from "../constants"
 import { apiSlice } from "./apiSlice"
 import { ProductType } from "@/types/productType"
 
+type ProductImageUploadResponse = {
+  message: string
+  imageUrls: Partial<
+    Record<
+      | "frontImage"
+      | "backImage"
+      | "frontDesign"
+      | "backDesign"
+      | "frontUpload"
+      | "backUpload"
+      | "images",
+      string[]
+    >
+  >
+}
+
 export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
@@ -34,7 +50,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
 
     createProduct: builder.mutation({
       query: (productData) => ({
-        url: `${PRODUCT_URL}`,
+        url: `${PRODUCT_URL}/admin`,
         method: "POST",
         body: productData,
       }),
@@ -50,9 +66,9 @@ export const productApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Products"],
     }),
 
-    uploadProductImage: builder.mutation({
+    uploadProductImage: builder.mutation<ProductImageUploadResponse, FormData>({
       query: (data) => ({
-        url: `${PRODUCT_URL}/upload-image`,
+        url: `${PRODUCT_URL}/admin/upload-images`,
         method: "POST",
         body: data,
       }),
