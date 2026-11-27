@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, ChevronDown, SlidersHorizontal } from "lucide-react"
+import { ChevronDown, SlidersHorizontal } from "lucide-react"
 import { ErrorCard } from "@/components/errorCard/errorCard"
 import ProductCard from "@/components/productCard/productCard"
 import { ProductCardSkeleton } from "@/components/productCard/productCardSkeleton/productCardSkeleton"
@@ -67,14 +67,6 @@ export function ProductsPage({
     router.replace(`${url.pathname}${url.search}`, { scroll: false })
   }
 
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      router.back()
-    } else {
-      router.push("/")
-    }
-  }
-
   const filteredProducts = (products ?? [])
     .filter(
       (product) =>
@@ -95,14 +87,6 @@ export function ProductsPage({
 
   return (
     <div className="mx-auto mt-24 min-h-svh max-w-7xl px-3 pt-8 pb-20 sm:mt-30 sm:px-8 sm:pt-12 lg:px-12">
-      <button
-        type="button"
-        onClick={handleBack}
-        className="mb-4 inline-flex min-h-10 items-center gap-2 rounded-lg text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-      >
-        <ArrowLeft size={16} aria-hidden="true" />
-        Back
-      </button>
       <header className="mb-6 sm:mb-8">
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           {categoryId && selectedCategoryName

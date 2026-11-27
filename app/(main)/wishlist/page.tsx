@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useSelector } from "react-redux"
 import { Heart, ShoppingBag } from "lucide-react"
+import { BackNavigation } from "@/components/navigation/backNavigation"
 import ErrorCard from "@/components/errorCard/errorCard"
 import {
   useGetWishlistQuery,
@@ -101,6 +102,7 @@ export default function WishlistPage() {
 
   return (
     <div className="wishlist-page">
+      <BackNavigation fallbackHref="/" />
       <header className="wishlist-header">
         <div>
           <p className="wishlist-eyebrow">Saved for later</p>
