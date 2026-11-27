@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { ChevronDown, SlidersHorizontal } from "lucide-react"
 import { ErrorCard } from "@/components/errorCard/errorCard"
 import ProductCard from "@/components/productCard/productCard"
 import { ProductCardSkeleton } from "@/components/productCard/productCardSkeleton/productCardSkeleton"
@@ -93,60 +94,73 @@ export function ProductsPage({
           Browse and filter the collection to find your next favorite.
         </p>
       </header>
-      <section
+      <details
         aria-label="Product filters"
-        className="mb-8 grid gap-4 rounded-2xl border border-zinc-200 p-4 sm:grid-cols-2 lg:grid-cols-[minmax(220px,1fr)_minmax(180px,0.7fr)_minmax(170px,0.6fr)] dark:border-zinc-800"
+        className="group mb-8 rounded-2xl border border-zinc-200 dark:border-zinc-800"
       >
-        <div className="space-y-2">
-          <label htmlFor="product-search" className="text-sm font-medium">
-            Search
-          </label>
-          <Input
-            id="product-search"
-            type="search"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search products"
-            className="h-10 rounded-xl px-3"
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden">
+          <span className="inline-flex items-center gap-2 text-sm font-semibold">
+            <SlidersHorizontal size={17} aria-hidden="true" />
+            Filters
+          </span>
+          <ChevronDown
+            size={18}
+            aria-hidden="true"
+            className="transition-transform group-open:rotate-180"
           />
-        </div>
+        </summary>
+        <div className="grid gap-4 border-t border-zinc-200 p-4 sm:grid-cols-2 lg:grid-cols-[minmax(220px,1fr)_minmax(180px,0.7fr)_minmax(170px,0.6fr)] dark:border-zinc-800">
+          <div className="space-y-2">
+            <label htmlFor="product-search" className="text-sm font-medium">
+              Search
+            </label>
+            <Input
+              id="product-search"
+              type="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search products"
+              className="h-10 rounded-xl px-3"
+            />
+          </div>
 
-        <div className="space-y-2">
-          <label htmlFor="product-category" className="text-sm font-medium">
-            Category
-          </label>
-          <select
-            id="product-category"
-            value={categoryId}
-            onChange={(event) => updateCategory(event.target.value)}
-            className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
-            <option value="">All categories</option>
-            {categories?.map((category) => (
-              <option key={category._id} value={category._id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="space-y-2">
+            <label htmlFor="product-category" className="text-sm font-medium">
+              Category
+            </label>
+            <select
+              id="product-category"
+              value={categoryId}
+              onChange={(event) => updateCategory(event.target.value)}
+              className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            >
+              <option value="">All categories</option>
+              {categories?.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className="space-y-2">
-          <label htmlFor="product-sort" className="text-sm font-medium">
-            Sort by
-          </label>
-          <select
-            id="product-sort"
-            value={sortOrder}
-            onChange={(event) => setSortOrder(event.target.value as SortOrder)}
-            className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
-            <option value="featured">Featured</option>
-            <option value="price-low">Price: low to high</option>
-            <option value="price-high">Price: high to low</option>
-            <option value="rating">Top rated</option>
-          </select>
+          <div className="space-y-2">
+            <label htmlFor="product-sort" className="text-sm font-medium">
+              Sort by
+            </label>
+            <select
+              id="product-sort"
+              value={sortOrder}
+              onChange={(event) => setSortOrder(event.target.value as SortOrder)}
+              className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            >
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: low to high</option>
+              <option value="price-high">Price: high to low</option>
+              <option value="rating">Top rated</option>
+            </select>
+          </div>
         </div>
-      </section>
+      </details>
 
       {isLoading ? (
         <div
