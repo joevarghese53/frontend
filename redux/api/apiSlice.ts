@@ -102,6 +102,7 @@ export const apiSlice = createApi({
     "CProduct",
     "ShippingAddress",
     "Tries",
+    "ContactMessage",
   ],
   endpoints: () => ({}),
 })

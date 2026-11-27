@@ -1,10 +1,18 @@
 import Link from "next/link"
-import { ArrowLeft, Boxes, Package, Tags, Users } from "lucide-react"
+import {
+  ArrowLeft,
+  Boxes,
+  MailQuestion,
+  Package,
+  Tags,
+  Users,
+} from "lucide-react"
 import { usePathname } from "next/navigation"
 
 const adminSections = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/orders", label: "Orders", icon: Package },
+  { href: "/admin/queries", label: "Contact queries", icon: MailQuestion },
   { href: "/admin/products", label: "Products", icon: Boxes },
   { href: "/admin/categories", label: "Categories", icon: Tags },
 ]

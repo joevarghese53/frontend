@@ -6,6 +6,7 @@ import {
   ArrowRight,
   Boxes,
   Heart,
+  MailQuestion,
   MapPin,
   Package,
   ShieldCheck,
@@ -111,6 +112,12 @@ const adminLinks = [
     icon: Package,
   },
   {
+    title: "Contact queries",
+    description: "Review customer messages and track which ones are resolved.",
+    href: "/admin/queries",
+    icon: MailQuestion,
+  },
+  {
     title: "Manage products",
     description: "Review, edit, and remove products from the catalog.",
     href: "/admin/products",
@@ -149,7 +156,7 @@ function AdminDashboard({
           </p>
         </header>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {adminLinks.map(({ title, description, href, icon: Icon }) => (
             <Link
               key={href}

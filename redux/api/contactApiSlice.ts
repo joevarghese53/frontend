@@ -15,6 +15,22 @@ type ContactMessageResponse = {
   id: string
 }
 
+export type ContactMessageTopic = ContactMessageInput["topic"]
+
+export type ContactMessage = {
+  _id: string
+  firstName: string
+  lastName: string
+  email: string
+  topic: ContactMessageTopic
+  message: string
+  isCompleted: boolean
+  completedAt: string | null
+  notificationSent: boolean
+  createdAt: string
+  updatedAt: string
+}
+
 export const contactApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     submitContactMessage: builder.mutation<
@@ -27,7 +43,26 @@ export const contactApiSlice = apiSlice.injectEndpoints({
         body,
       }),
     }),
+    getContactMessages: builder.query<ContactMessage[], void>({
+      query: () => `${CONTACT_URL}/admin`,
+      providesTags: ["ContactMessage"],
+    }),
+    updateContactMessageStatus: builder.mutation<
+      ContactMessage,
+      { id: string; isCompleted: boolean }
+    >({
+      query: ({ id, isCompleted }) => ({
+        url: `${CONTACT_URL}/admin/${id}`,
+        method: "PATCH",
+        body: { isCompleted },
+      }),
+      invalidatesTags: ["ContactMessage"],
+    }),
   }),
 })
 
-export const { useSubmitContactMessageMutation } = contactApiSlice
+export const {
+  useGetContactMessagesQuery,
+  useSubmitContactMessageMutation,
+  useUpdateContactMessageStatusMutation,
+} = contactApiSlice
