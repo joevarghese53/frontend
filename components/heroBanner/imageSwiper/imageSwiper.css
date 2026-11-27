@@ -1,12 +1,11 @@
 .image-swiper-main-container {
   max-width: 1500px;
-  margin-top: 113px;
   margin-left: auto;
   margin-right: auto;
   position: relative;
 
   /* Responsive hero banner */
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 9 / 7;
 }
 
 .image-swiper {
