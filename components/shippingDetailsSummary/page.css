@@ -177,6 +177,7 @@
   .shipping-summary {
     padding: 12px;
     border-radius: 10px;
+    box-shadow: none;
   }
 
   .shipping-summary-toggle {
