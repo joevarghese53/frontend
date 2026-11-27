@@ -49,7 +49,7 @@ const ShopByCategory = () => {
         Shop By Category
       </h2>
 
-      <div className="m-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="m-4 grid grid-cols-1 gap-4 sm:m-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {categories?.map((category: CategoryType) => (
           <CategoryCard
             key={category._id}
