@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import { toast } from "sonner"
 import { AdminPageLayout } from "@/components/admin/adminPageLayout"
 import { getAdminErrorMessage, isRecord } from "@/components/admin/adminUtils"
@@ -15,7 +16,10 @@ import {
   useOutForDeliveryOrderMutation,
   useShippedOrderMutation,
 } from "@/redux/api/orderApiSlice"
-import type { CreateOrderResponse } from "@/types/orderType"
+import type {
+  CreateOrderResponse,
+  OrderItemResponse,
+} from "@/types/orderType"
 
 type OrderStatusFilter =
   | "all"
@@ -101,9 +105,19 @@ function getNextAction(order: CreateOrderResponse) {
   return null
 }
 
+function getOrderImages(item: OrderItemResponse) {
+  return [
+    { label: "Front image", src: item.frontImage },
+    { label: "Front design", src: item.frontDesign },
+    { label: "Back image", src: item.backImage },
+    { label: "Back design", src: item.backDesign },
+  ]
+}
+
 export default function AdminOrdersPage() {
   const { data: orders, isLoading, error, refetch } = useGetAllOrdersQuery()
   const [statusFilter, setStatusFilter] = useState<OrderStatusFilter>("all")
+  const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [confirmOrder] = useConfirmOrderMutation()
   const [deleteOrder, { isLoading: isDeleting }] = useDeleteOrderMutation()
@@ -235,59 +249,173 @@ export default function AdminOrdersPage() {
                 return (
                   <li
                     key={order._id}
-                    className="flex flex-col gap-4 rounded-2xl border border-zinc-200 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-800"
+                    className="rounded-2xl border border-zinc-200 p-5 dark:border-zinc-800"
                   >
-                    <div className="min-w-0">
-                      <p className="font-semibold">
-                        Order #{order._id.slice(-8).toUpperCase()}
-                      </p>
-                      <p className="mt-1 text-sm text-zinc-500">
-                        {dateFormatter.format(new Date(order.createdAt))} ·{" "}
-                        {itemCount} {itemCount === 1 ? "item" : "items"} ·{" "}
-                        {getOrderStatus(order)}
-                      </p>
-                      <p className="mt-1 text-sm text-zinc-500">
-                        Customer {getCustomerLabel(order.user)}
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-end">
-                      <span className="font-semibold">
-                        {currencyFormatter.format(order.totalPrice)}
-                      </span>
-                      <div className="flex flex-wrap gap-2">
-                        {nextAction ? (
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="min-w-0">
+                        <p className="font-semibold">
+                          Order #{order._id.slice(-8).toUpperCase()}
+                        </p>
+                        <p className="mt-1 text-sm text-zinc-500">
+                          {dateFormatter.format(new Date(order.createdAt))} ·{" "}
+                          {itemCount} {itemCount === 1 ? "item" : "items"} ·{" "}
+                          {getOrderStatus(order)}
+                        </p>
+                        <p className="mt-1 text-sm text-zinc-500">
+                          Customer {getCustomerLabel(order.user)}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-end">
+                        <span className="font-semibold">
+                          {currencyFormatter.format(order.totalPrice)}
+                        </span>
+                        <div className="flex flex-wrap gap-2">
                           <Button
                             type="button"
+                            variant="outline"
                             className="rounded-xl"
-                            disabled={updatingId !== null || isDeleting}
+                            aria-expanded={expandedOrderId === order._id}
                             onClick={() =>
-                              void advanceOrder(order, nextAction.action)
+                              setExpandedOrderId(
+                                expandedOrderId === order._id
+                                  ? null
+                                  : order._id
+                              )
                             }
                           >
-                            {updatingId === order._id
-                              ? "Updating…"
-                              : nextAction.label}
+                            {expandedOrderId === order._id
+                              ? "Hide details"
+                              : "View details"}
                           </Button>
-                        ) : (
-                          <span className="self-center rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium dark:bg-zinc-900">
-                            {order.isDelivered || order.status === "delivered"
-                              ? "Complete"
-                              : "Waiting for payment"}
-                          </span>
-                        )}
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          className="rounded-xl"
-                          disabled={updatingId !== null || isDeleting}
-                          onClick={() => void handleDeleteOrder(order)}
-                        >
-                          {deletingId === order._id
-                            ? "Deleting…"
-                            : "Delete order"}
-                        </Button>
+                          {nextAction ? (
+                            <Button
+                              type="button"
+                              className="rounded-xl"
+                              disabled={updatingId !== null || isDeleting}
+                              onClick={() =>
+                                void advanceOrder(order, nextAction.action)
+                              }
+                            >
+                              {updatingId === order._id
+                                ? "Updating…"
+                                : nextAction.label}
+                            </Button>
+                          ) : (
+                            <span className="self-center rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium dark:bg-zinc-900">
+                              {order.isDelivered ||
+                              order.status === "delivered"
+                                ? "Complete"
+                                : "Waiting for payment"}
+                            </span>
+                          )}
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            className="rounded-xl"
+                            disabled={updatingId !== null || isDeleting}
+                            onClick={() => void handleDeleteOrder(order)}
+                          >
+                            {deletingId === order._id
+                              ? "Deleting…"
+                              : "Delete order"}
+                          </Button>
+                        </div>
                       </div>
                     </div>
+
+                    {expandedOrderId === order._id && (
+                      <div
+                        id={`order-details-${order._id}`}
+                        className="mt-5 space-y-6 border-t border-zinc-200 pt-5 dark:border-zinc-800"
+                      >
+                        <section aria-label="Ordered products">
+                          <h3 className="mb-3 text-sm font-semibold">
+                            Ordered products
+                          </h3>
+                          <ul className="space-y-5">
+                            {order.orderItems.map((item, index) => (
+                              <li
+                                key={`${item._id}-${index}`}
+                                className="rounded-xl bg-zinc-50 p-4 dark:bg-zinc-900"
+                              >
+                                <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+                                  <div>
+                                    <p className="font-medium">{item.name}</p>
+                                    <p className="mt-1 text-sm text-zinc-500">
+                                      {item.category} · Size {item.size} · Qty{" "}
+                                      {item.qty}
+                                    </p>
+                                  </div>
+                                  <span className="text-sm font-semibold">
+                                    {currencyFormatter.format(item.price)}
+                                  </span>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                                  {getOrderImages(item).map(({ label, src }) => (
+                                    <div key={label} className="min-w-0">
+                                      <p className="mb-2 text-xs font-medium text-zinc-500">
+                                        {label}
+                                      </p>
+                                      {typeof src === "string" &&
+                                      src.trim() ? (
+                                        <a
+                                          href={src}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          className="block overflow-hidden rounded-lg border border-zinc-200 bg-white dark:border-zinc-700"
+                                          aria-label={`Open ${label.toLowerCase()} for ${item.name}`}
+                                        >
+                                          <Image
+                                            src={src}
+                                            alt={`${item.name} ${label.toLowerCase()}`}
+                                            width={240}
+                                            height={240}
+                                            unoptimized
+                                            className="h-36 w-full object-contain"
+                                          />
+                                        </a>
+                                      ) : (
+                                        <div className="flex h-36 items-center justify-center rounded-lg border border-dashed border-zinc-300 text-xs text-zinc-500 dark:border-zinc-700">
+                                          Not available
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+
+                        <section aria-label="Shipping address">
+                          <h3 className="mb-2 text-sm font-semibold">
+                            Shipping address
+                          </h3>
+                          <address className="text-sm leading-6 text-zinc-500 not-italic">
+                            <span className="font-medium text-foreground">
+                              {order.shippingAddress.fullName}
+                            </span>
+                            <br />
+                            {order.shippingAddress.addressLine1}
+                            {order.shippingAddress.addressLine2 && (
+                              <>
+                                <br />
+                                {order.shippingAddress.addressLine2}
+                              </>
+                            )}
+                            <br />
+                            {order.shippingAddress.city},{" "}
+                            {order.shippingAddress.state}{" "}
+                            {order.shippingAddress.postalCode}
+                            <br />
+                            {order.shippingAddress.country}
+                            <br />
+                            Phone: {order.shippingAddress.phoneNumber}
+                          </address>
+                        </section>
+                      </div>
+                    )}
                   </li>
                 )
               })}
