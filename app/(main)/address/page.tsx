@@ -418,7 +418,7 @@ const AddressPage = () => {
     <div className="address-page-main-container">
       <CheckoutSteps currentStep="address" />
 
-      <div className="cart-content-wrapper">
+      <div className="address-content-body">
 
         <section className="addresses-section" aria-labelledby="deliver-to-heading">
           <div className="addresses-header">
