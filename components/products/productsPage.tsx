@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronDown, SlidersHorizontal } from "lucide-react"
+import { ArrowLeft, ChevronDown, SlidersHorizontal } from "lucide-react"
 import { ErrorCard } from "@/components/errorCard/errorCard"
 import ProductCard from "@/components/productCard/productCard"
 import { ProductCardSkeleton } from "@/components/productCard/productCardSkeleton/productCardSkeleton"
@@ -12,6 +12,9 @@ import { useAllProductsQuery } from "@/redux/api/productApiSlice"
 import type { ProductType } from "@/types/productType"
 
 type SortOrder = "featured" | "price-low" | "price-high" | "rating"
+
+const productGridClassName =
+  "grid grid-cols-2 justify-items-center gap-x-2 gap-y-8 sm:flex sm:flex-wrap sm:justify-center sm:gap-8"
 
 function getErrorMessage(error: unknown): string {
   if (typeof error !== "object" || error === null) {
@@ -64,6 +67,14 @@ export function ProductsPage({
     router.replace(`${url.pathname}${url.search}`, { scroll: false })
   }
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      router.back()
+    } else {
+      router.push("/")
+    }
+  }
+
   const filteredProducts = (products ?? [])
     .filter(
       (product) =>
@@ -83,14 +94,22 @@ export function ProductsPage({
       .name
 
   return (
-    <div className="mx-auto mt-30 min-h-svh max-w-7xl px-5 pt-12 pb-20 sm:px-8 lg:px-12">
-      <header className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight">
+    <div className="mx-auto mt-24 min-h-svh max-w-7xl px-3 pt-8 pb-20 sm:mt-30 sm:px-8 sm:pt-12 lg:px-12">
+      <button
+        type="button"
+        onClick={handleBack}
+        className="mb-4 inline-flex min-h-10 items-center gap-2 rounded-lg text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      >
+        <ArrowLeft size={16} aria-hidden="true" />
+        Back
+      </button>
+      <header className="mb-6 sm:mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           {categoryId && selectedCategoryName
             ? selectedCategoryName
             : "All products"}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
           Browse and filter the collection to find your next favorite.
         </p>
       </header>
@@ -164,7 +183,7 @@ export function ProductsPage({
 
       {isLoading ? (
         <div
-          className="flex flex-wrap justify-center gap-8"
+          className={productGridClassName}
           role="status"
           aria-label="Loading products"
         >
@@ -188,7 +207,7 @@ export function ProductsPage({
             {filteredProducts.length}{" "}
             {filteredProducts.length === 1 ? "product" : "products"}
           </p>
-          <div className="flex flex-wrap justify-center gap-8">
+          <div className={productGridClassName}>
             {filteredProducts.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}

@@ -3,11 +3,11 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export function ProductCardSkeleton() {
   return (
-    <Card className="w-70 border-none">
+    <Card className="w-[42vw] max-w-70 border-none sm:w-70">
       <CardContent className="p-0">
         {/* Product Image */}
         <div className="relative w-full overflow-hidden rounded-xl bg-muted">
-          <Skeleton className="h-auto w-full object-cover" />
+          <Skeleton className="aspect-square w-full object-cover" />
         </div>
 
         {/* Product Info */}
