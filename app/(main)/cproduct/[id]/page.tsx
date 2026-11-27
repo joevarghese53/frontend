@@ -60,7 +60,7 @@ const CProductPage = () => {
             const cartData = {
                 productId: product._id,
                 quantity: qty,
-                productType: "CProduct",
+                productType: "customProduct",
                 size: selectedSize,
             }
 

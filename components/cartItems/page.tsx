@@ -35,6 +35,9 @@ type DisplayItem = {
   original: CartItem | null
 }
 
+const isCustomProduct = (productType: string) =>
+  ["customProduct", "cProduct", "CProduct"].includes(productType)
+
 const CartItems = (props: CartItemsProps) => {
   const { variant = "cart", items } = props
   const onRemove = "onRemove" in props ? props.onRemove : undefined
@@ -94,7 +97,7 @@ const CartItems = (props: CartItemsProps) => {
             <div className="cart-item-image">
               <Link
                 href={
-                  item.productType === "CProduct"
+                  isCustomProduct(item.productType)
                     ? `/cproduct/${item.productId}`
                     : `/product/${item.productId}`
                 }
@@ -116,7 +119,7 @@ const CartItems = (props: CartItemsProps) => {
                   <h4 className="cart-item-name">
                     <Link
                       href={
-                        item.productType === "CProduct"
+                        isCustomProduct(item.productType)
                           ? `/cproduct/${item.productId}`
                           : `/product/${item.productId}`
                       }
