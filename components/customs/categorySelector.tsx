@@ -1,7 +1,7 @@
 const CategorySelector = ({ category, setCategory }: { category: string; setCategory: (category: string) => void }) => {
 
     return (
-        <div className="p-5 rounded-[15px] border shadow-[0_0_14px_8px_rgba(0,0,0,0.16),0_0_4px_1px_rgba(0,0,0,0.16)]">
+        <div className="rounded-[15px] border p-4 shadow-[0_0_14px_8px_rgba(0,0,0,0.16),0_0_4px_1px_rgba(0,0,0,0.16)] sm:p-5">
 
             <h2 className="font-semibold mb-4">
                 Category
@@ -15,6 +15,8 @@ const CategorySelector = ({ category, setCategory }: { category: string; setCate
                     }
                     className={`
                     rounded-2xl
+                    min-h-24
+                    p-3
                     border
                     flex
                     flex-col
@@ -37,6 +39,8 @@ const CategorySelector = ({ category, setCategory }: { category: string; setCate
                     }
                     className={`
                     rounded-2xl
+                    min-h-24
+                    p-3
                     border
                     flex
                     flex-col

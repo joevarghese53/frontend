@@ -9,11 +9,11 @@ const Preview = ({ color, category, side, setSide, frontImageUrl, backImageUrl }
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-semibold mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="mb-4 text-xl font-semibold sm:mb-6 sm:text-3xl">
           Preview
         </h2>
-        <div className="flex gap-4 mb-6">
+        <div className="mb-4 flex gap-2 sm:mb-6 sm:gap-4">
           <Button
             onClick={() => setSide("front")}
             size="lg"
@@ -31,7 +31,7 @@ const Preview = ({ color, category, side, setSide, frontImageUrl, backImageUrl }
         </div>
       </div>
 
-      <div className="h-120 rounded-3xl flex items-center justify-center bg-[radial-gradient(circle_at_50%_30%,#25c7e9_0%,#1d889b_35%,#236477_68%,#173d4b_100%)]">
+      <div className="flex h-[65svh] min-h-64 max-h-120 items-center justify-center rounded-3xl bg-[radial-gradient(circle_at_50%_30%,#25c7e9_0%,#1d889b_35%,#236477_68%,#173d4b_100%)] sm:h-120">
         {side === "front" && (
           <Image
             src={frontImage}
@@ -39,7 +39,7 @@ const Preview = ({ color, category, side, setSide, frontImageUrl, backImageUrl }
             width={720}
             height={720}
             unoptimized={Boolean(frontImageUrl)}
-            className="h-[90%] object-contain"
+            className="h-[90%] max-w-[90%] object-contain"
           />
         )}
         {side === "back" && (
@@ -49,7 +49,7 @@ const Preview = ({ color, category, side, setSide, frontImageUrl, backImageUrl }
             width={720}
             height={720}
             unoptimized={Boolean(backImageUrl)}
-            className="h-[90%] object-contain"
+            className="h-[90%] max-w-[90%] object-contain"
           />
         )}
       </div>

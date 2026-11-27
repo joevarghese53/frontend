@@ -10,7 +10,7 @@ const suggestions = [
 
 const PromptInput = ({ prompt, setPrompt }: { prompt: string; setPrompt: (prompt: string) => void }) => {
   return (
-    <div className="p-5 rounded-[15px] border shadow-[0_0_14px_8px_rgba(0,0,0,0.16),0_0_4px_1px_rgba(0,0,0,0.16)]">
+    <div className="rounded-[15px] border p-4 shadow-[0_0_14px_8px_rgba(0,0,0,0.16),0_0_4px_1px_rgba(0,0,0,0.16)] sm:p-5">
 
       {/* Header */}
       <div className="mb-4">
@@ -29,7 +29,7 @@ const PromptInput = ({ prompt, setPrompt }: { prompt: string; setPrompt: (prompt
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="A fallen angel sitting beneath the moon..."
-          className="h-30 p-5 resize-none border border-solid border-[#adadad] focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="h-30 resize-none border border-solid border-[#adadad] p-4 focus-visible:ring-0 focus-visible:ring-offset-0 sm:p-5"
         />
 
         <div className="absolute bottom-4 right-4 text-xs text-muted-foreground">

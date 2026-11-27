@@ -178,10 +178,10 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen pt-32 pb-20 max-w-7xl mx-auto px-6 grid lg:grid-cols-[420px_1fr] gap-8">
+    <div className="mx-auto grid min-h-screen min-w-0 max-w-7xl grid-cols-1 gap-6 px-4 pt-24 pb-20 sm:px-6 sm:pt-28 lg:grid-cols-[420px_minmax(0,1fr)] lg:gap-8 lg:pt-32">
       {/* LEFT PANEL */}
 
-      <div className="space-y-6">
+      <div className="min-w-0 space-y-5 sm:space-y-6">
         <PromptInput
           prompt={prompt}
           setPrompt={setPrompt}
@@ -199,7 +199,7 @@ export default function Page() {
 
         <Button
           size="lg"
-          className="w-full rounded-[15px] py-5 text-lg font-semibold"
+          className="w-full rounded-[15px] py-4 text-base font-semibold sm:py-5 sm:text-lg"
           disabled={!prompt || isGenerating}
           onClick={handleGenerateImage}
         >
@@ -211,8 +211,8 @@ export default function Page() {
 
       {/* RIGHT PANEL */}
 
-      <div className="h-fit">
-        <div className="p-5 rounded-[15px] border shadow-[0_0_14px_8px_rgba(0,0,0,0.16),0_0_4px_1px_rgba(0,0,0,0.16)]">
+      <div className="h-fit min-w-0">
+        <div className="min-w-0 rounded-[15px] border p-4 shadow-[0_0_14px_8px_rgba(0,0,0,0.16),0_0_4px_1px_rgba(0,0,0,0.16)] sm:p-5">
           <Preview
             color={color}
             category={category}
@@ -240,7 +240,7 @@ export default function Page() {
           />
           {/* Create Button */}
           <Button
-            className="mt-5 w-full rounded-2xl text-xl py-5 font-semibold bg-black hover:bg-zinc-900"
+            className="mt-5 w-full rounded-2xl bg-black py-4 text-base font-semibold hover:bg-zinc-900 sm:py-5 sm:text-xl"
             onClick={handleCreateProduct}
             disabled={isCreating}
           >
@@ -250,7 +250,7 @@ export default function Page() {
       </div>
 
       {/* MY CREATIONS */}
-      <div className="lg:col-span-2">
+      <div className="min-w-0 lg:col-span-2">
         <MyCreations
           products={cProducts ?? []}
           isLoading={isCProductsLoading}
