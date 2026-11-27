@@ -56,5 +56,6 @@
 
   .order-summary-card {
     box-shadow: none;
+    padding: 6px;
   }
 }

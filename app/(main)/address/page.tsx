@@ -423,14 +423,16 @@ const AddressPage = () => {
         <section className="addresses-section" aria-labelledby="deliver-to-heading">
           <div className="addresses-header">
             <h2 id="deliver-to-heading">Deliver To:</h2>
-            <button
-              type="button"
-              className="add-address-button"
-              onClick={handleAddNew}
-            >
-              <FiPlus aria-hidden="true" />
-              Add New Address
-            </button>
+            {addressList.length > 0 ? (
+              <button
+                type="button"
+                className="add-address-button"
+                onClick={handleAddNew}
+              >
+                <FiPlus aria-hidden="true" />
+                Add New Address
+              </button>
+            ) : null}
           </div>
 
           {addressList.length > 0 ? (

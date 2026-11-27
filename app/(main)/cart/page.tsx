@@ -53,7 +53,7 @@ const Cart = () => {
   const billingRef = useRef<HTMLElement>(null)
 
   const scrollToBilling = () => {
-    billingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+    billingRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
   }
 
   const handleRemoveFromCart = async (item: CartItem) => {
@@ -195,7 +195,7 @@ const Cart = () => {
           </button>
         </div>
         <Link href="/address" className="cart-mobile-checkout">
-          Checkout
+          Proceed to Checkout
         </Link>
       </div>
     </div>

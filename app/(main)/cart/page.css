@@ -387,27 +387,26 @@
   .cart-mobile-total {
     font-size: 1rem;
     font-weight: 700;
-    color: #333;
+    color: #000000;
   }
 
   .cart-mobile-details {
     background: none;
     border: none;
-    color: #f02d34;
+    color: #0000009c;
     font-size: 12px;
     cursor: pointer;
   }
 
   .cart-mobile-checkout {
-    background: #f02d34;
-    color: white;
-    padding: 10px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
+    color: #fff;
     text-align: center;
+    background: #000000;
+    border-radius: 8px;
     align-content: center;
     width: 60vw;
     margin-left: 16px;
+    padding: 10px 24px;
+    text-decoration: none;
   }
 }
