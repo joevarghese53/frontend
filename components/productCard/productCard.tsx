@@ -69,7 +69,7 @@ export default function ProductCard({
   }
 
   return (
-    <Card className="w-70 border-none">
+    <Card className="w-[42vw] max-w-70 border-none sm:w-70">
       <CardContent className="p-0">
         {/* Product Image */}
         <div className="relative w-full overflow-hidden rounded-xl bg-muted cursor-pointer">
@@ -97,15 +97,19 @@ export default function ProductCard({
           </button>
         </div>
         {/* Product Info */}
-        <div className="mt-3 flex items-start justify-between">
-          <div>
-            <h3 className="text-sm font-semibold">{product.name}</h3>
-            <p className="text-xs text-muted-foreground">
+        <div className="mt-2 flex items-start justify-between gap-2 sm:mt-3">
+          <div className="min-w-0">
+            <h3 className="truncate text-[11px] font-semibold sm:text-sm">
+              {product.name}
+            </h3>
+            <p className="truncate text-[9px] text-muted-foreground sm:text-xs">
               {product.category.name}
             </p>
           </div>
 
-          <span className="font-semibold">Rs.{product.price.toFixed(0)}</span>
+          <span className="shrink-0 text-[11px] font-semibold sm:text-sm">
+            Rs.{product.price.toFixed(0)}
+          </span>
         </div>
       </CardContent>
     </Card>
