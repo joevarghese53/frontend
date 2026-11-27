@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { ArrowLeft, Boxes, Package, Tags, Users } from "lucide-react"
+import { usePathname } from "next/navigation"
 
 const adminSections = [
   { href: "/admin/users", label: "Users", icon: Users },
@@ -17,6 +18,7 @@ export function AdminPageLayout({
   description: string
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
   return (
     <div className="mx-auto min-h-svh max-w-375 px-5 pt-32 pb-20 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-6xl">
@@ -46,7 +48,12 @@ export function AdminPageLayout({
             <Link
               key={href}
               href={href}
-              className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-900"
+              aria-current={pathname === href ? "page" : undefined}
+              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition-colors ${
+                pathname === href
+                  ? "border-foreground bg-foreground text-background"
+                  : "border-zinc-200 hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-900"
+              }`}
             >
               <Icon size={16} aria-hidden="true" />
               {label}

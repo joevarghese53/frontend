@@ -23,9 +23,11 @@ import {
 import { useLogoutMutation } from "@/redux/api/usersApiSlice"
 import { apiSlice } from "@/redux/api/apiSlice"
 import { logout as clearAuth } from "@/redux/state/auth/authSlice"
+import { useRouter } from "next/navigation"
 
 const AvatarWithUserDropDown = () => {
   const dispatch = useDispatch()
+  const router = useRouter()
   const userInfo = useSelector((state: RootState) => state.auth.userInfo)
   const [logout] = useLogoutMutation()
 
@@ -38,6 +40,7 @@ const AvatarWithUserDropDown = () => {
 
     dispatch(clearAuth())
     dispatch(apiSlice.util.resetApiState())
+    router.replace("/login")
   }
 
   const name =

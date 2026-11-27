@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ProductType } from "@/types/productType"
 import { CustomProductType } from "@/types/cProductType"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
@@ -22,6 +23,7 @@ export default function ProductCard({
   product: ProductType | CustomProductType;
 }) {
 
+  const router = useRouter()
   const { userInfo } = useSelector((state: RootState) => state.auth)
   const productId = "userId" in product ? product._id : product._id;
   const isCustomProduct = "userId" in product;
@@ -45,6 +47,7 @@ export default function ProductCard({
   const handleWishlistToggle = async () => {
     if (!userInfo) {
       toast.info("Please login to continue.")
+      router.push("/login")
       return
     }
 

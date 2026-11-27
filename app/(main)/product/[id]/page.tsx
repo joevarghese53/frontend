@@ -1,7 +1,7 @@
 "use client"
 import { useState, type Dispatch, type FormEvent, type SetStateAction } from "react"
 import Image from "next/image"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { GoHeart, GoHeartFill } from "react-icons/go"
 import { useSelector } from "react-redux"
@@ -43,6 +43,7 @@ function getErrorMessage(error: unknown): string {
 
 const ProductPage = () => {
     const params = useParams()
+    const router = useRouter()
     const productId = typeof params.id === "string" ? params.id : params.id?.[0] ?? ""
     const { data: product, isLoading, error, refetch } = useGetProductDetailsQuery(
         productId,
@@ -67,6 +68,7 @@ const ProductPage = () => {
     const handleAddToCart = async () => {
         if (!userInfo) {
             toast.info("Please login to continue.")
+            router.push("/login")
             return
         }
 
@@ -98,6 +100,7 @@ const ProductPage = () => {
     const handleAddToWishlist = async () => {
         if (!userInfo) {
             toast.info("Please login to continue.")
+            router.push("/login")
             return
         }
 
@@ -116,6 +119,7 @@ const ProductPage = () => {
     const handleRemoveFromWishlist = async () => {
         if (!userInfo) {
             toast.info("Please login to continue.")
+            router.push("/login")
             return
         }
 
@@ -136,6 +140,7 @@ const ProductPage = () => {
 
         if (!userInfo) {
             toast.info("Please login to review the product.")
+            router.push("/login")
             return
         }
 

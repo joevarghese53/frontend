@@ -2,6 +2,8 @@
 "use client"
 
 import "./checkoutSteps.css"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 
 interface CheckoutStepsProps {
   currentStep: "cart" | "address" | "payment"
@@ -14,6 +16,8 @@ const steps = [
 ] as const
 
 const CheckoutSteps = ({ currentStep }: CheckoutStepsProps) => {
+  const searchParams = useSearchParams()
+  const paymentQuery = searchParams.toString()
   const currentIndex = steps.findIndex(
     (step) => step.value === currentStep
   )
@@ -31,9 +35,22 @@ const CheckoutSteps = ({ currentStep }: CheckoutStepsProps) => {
                 : ""
           }`}
         >
-          <span className="checkout-step-label">
-            {step.label}
-          </span>
+          {index <= currentIndex ? (
+            <Link
+              href={
+                step.value === "cart"
+                  ? "/cart"
+                  : step.value === "address"
+                    ? "/address"
+                    : `/payment${paymentQuery ? `?${paymentQuery}` : ""}`
+              }
+              className="checkout-step-label"
+            >
+              {step.label}
+            </Link>
+          ) : (
+            <span className="checkout-step-label">{step.label}</span>
+          )}
 
           {index !== steps.length - 1 && (
             <span className="checkout-step-divider">

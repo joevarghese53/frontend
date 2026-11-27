@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState } from "react"
 import Script from "next/script"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import CheckoutSteps from "@/components/checkoutSteps/checkoutSteps"
 import { ErrorCard } from "@/components/errorCard/errorCard"
@@ -56,6 +56,7 @@ function getErrorMessage(error: unknown): string {
 }
 
 function PaymentContent() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const orderId = searchParams.get("orderId")
   const [isPolling, setIsPolling] = useState(false)
@@ -119,6 +120,7 @@ function PaymentContent() {
           setIsPolling(false)
           await refetchOrder()
           toast.success("Payment successful")
+          router.push("/myOrders")
           return
         }
 

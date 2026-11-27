@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
 import Image from "next/image"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { GoHeart, GoHeartFill } from "react-icons/go"
 import { useSelector } from "react-redux"
@@ -20,6 +20,7 @@ import "./page.css"
 
 const CProductPage = () => {
     const params = useParams()
+    const router = useRouter()
     const productId = typeof params.id === "string" ? params.id : params.id?.[0] ?? ""
     const { data: product, isLoading, error, refetch } = useGetCProductDetailsQuery(
         productId,
@@ -41,6 +42,7 @@ const CProductPage = () => {
     const handleAddToCart = async () => {
         if (!userInfo) {
             toast.info("Please login to continue.")
+            router.push("/login")
             return
         }
 
@@ -58,7 +60,7 @@ const CProductPage = () => {
             const cartData = {
                 productId: product._id,
                 quantity: qty,
-                productType: "Product",
+                productType: "CProduct",
                 size: selectedSize,
             }
 
@@ -72,6 +74,7 @@ const CProductPage = () => {
     const handleAddToWishlist = async () => {
         if (!userInfo) {
             toast.info("Please login to continue.")
+            router.push("/login")
             return
         }
 
@@ -90,6 +93,7 @@ const CProductPage = () => {
     const handleRemoveFromWishlist = async () => {
         if (!userInfo) {
             toast.info("Please login to continue.")
+            router.push("/login")
             return
         }
 

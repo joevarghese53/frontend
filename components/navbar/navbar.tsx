@@ -56,12 +56,12 @@ export default function Navbar() {
         {userInfo ? (
           <AvatarWithUserDropDown />
         ) : (
-          <button 
-          className="hidden rounded-xl bg-white px-5 py-2 text-sm font-medium text-black transition hover:scale-105 md:block"
-          onClick={() => window.location.href = "/login"}
+          <Link
+            href="/login"
+            className="hidden rounded-xl bg-white px-5 py-2 text-sm font-medium text-black transition hover:scale-105 md:block"
           >
             Login / Sign Up
-          </button>
+          </Link>
         )}
       </div>
 
@@ -73,10 +73,24 @@ export default function Navbar() {
           className="mt-4 space-y-4 rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-xl md:hidden"
         >
           {links.map((link) => (
-            <Link key={link.name} href={link.href} className="block text-lg">
+            <Link
+              key={link.name}
+              href={link.href}
+              className="block text-lg"
+              onClick={() => setOpen(false)}
+            >
               {link.name}
             </Link>
           ))}
+          {!userInfo && (
+            <Link
+              href="/login"
+              className="block text-lg"
+              onClick={() => setOpen(false)}
+            >
+              Login / Sign Up
+            </Link>
+          )}
         </motion.div>
       )}
     </nav>

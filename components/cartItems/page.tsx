@@ -2,6 +2,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { FiTrash2 } from "react-icons/fi"
 import type { CartItem } from "@/types/cartType"
 import type { OrderItemResponse } from "@/types/orderType"
@@ -23,6 +24,8 @@ type CartItemsProps =
 
 type DisplayItem = {
   key: string
+  productId: string
+  productType: string
   name: string
   category: string
   frontImage: string
@@ -39,6 +42,8 @@ const CartItems = (props: CartItemsProps) => {
   const displayItems: DisplayItem[] = variant === "payment"
     ? (items as OrderItemResponse[]).map((item) => ({
         key: item._id,
+        productId: item._id,
+        productType: item.productType,
         name: item.name,
         category: item.category,
         frontImage: item.frontImage,
@@ -49,6 +54,8 @@ const CartItems = (props: CartItemsProps) => {
       }))
     : (items as CartItem[]).map((item) => ({
         key: item._id,
+        productId: item.productId._id,
+        productType: item.productType,
         name: item.productId.name,
         category: item.productId.category,
         frontImage: item.productId.frontImage,
@@ -85,20 +92,37 @@ const CartItems = (props: CartItemsProps) => {
             key={item.key}
           >
             <div className="cart-item-image">
-              <Image
-                src={item.frontImage}
-                alt={item.name}
-                width={130}
-                height={170}
-                sizes="130px"
-              />
+              <Link
+                href={
+                  item.productType === "CProduct"
+                    ? `/cproduct/${item.productId}`
+                    : `/product/${item.productId}`
+                }
+                aria-label={`View ${item.name}`}
+              >
+                <Image
+                  src={item.frontImage}
+                  alt={item.name}
+                  width={130}
+                  height={170}
+                  sizes="130px"
+                />
+              </Link>
             </div>
 
             <div className="cart-item-details">
               <div className="cart-item-info">
                 <div>
                   <h4 className="cart-item-name">
-                    {item.name}
+                    <Link
+                      href={
+                        item.productType === "CProduct"
+                          ? `/cproduct/${item.productId}`
+                          : `/product/${item.productId}`
+                      }
+                    >
+                      {item.name}
+                    </Link>
                   </h4>
 
                   <p className="cart-item-category">
