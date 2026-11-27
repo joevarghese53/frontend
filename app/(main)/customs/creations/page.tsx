@@ -152,7 +152,7 @@ export default function CreationsPage() {
         <div className="rounded-2xl border border-dashed border-zinc-300 px-6 py-12 text-center dark:border-zinc-700">
           {creations?.length ? (
             <p className="text-sm text-zinc-500">
-              No creations match "{search}". Try another search.
+              No creations match &quot;{search}&quot;. Try another search.
             </p>
           ) : (
             <>
