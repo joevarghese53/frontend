@@ -98,6 +98,9 @@ const AddressPage = () => {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const userInfo = useSelector((state: RootState) => state.auth.userInfo)
+  const isAuthHydrated = useSelector(
+    (state: RootState) => state.auth.isHydrated
+  )
   const selectedAddress = useSelector(
     (state: RootState) => state.checkout.selectedAddress
   )
@@ -334,6 +337,17 @@ const AddressPage = () => {
     setShowForm(true)
   }
 
+  if (!isAuthHydrated || isAddressLoading || isCartLoading) {
+    return (
+      <div className="address-page-main-container">
+        <div className="address-loading-state" role="status" aria-live="polite">
+          <div className="address-loading-spinner" />
+          <p>Loading address and cart details…</p>
+        </div>
+      </div>
+    )
+  }
+
   if (!userInfo) {
     return (
       <div className="address-page-main-container">
@@ -342,17 +356,6 @@ const AddressPage = () => {
           <Link href="/login" className="address-return-link">
             Sign in
           </Link>
-        </div>
-      </div>
-    )
-  }
-
-  if (isAddressLoading || isCartLoading) {
-    return (
-      <div className="address-page-main-container">
-        <div className="address-loading-state" role="status" aria-live="polite">
-          <div className="address-loading-spinner" />
-          <p>Loading address and cart details…</p>
         </div>
       </div>
     )

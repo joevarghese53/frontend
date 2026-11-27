@@ -46,6 +46,9 @@ function getErrorMessage(error: unknown): string {
 
 const Cart = () => {
   const userInfo = useSelector((state: RootState) => state.auth.userInfo)
+  const isAuthHydrated = useSelector(
+    (state: RootState) => state.auth.isHydrated
+  )
   const { data, isLoading, error, refetch } = useGetCartQuery(undefined, {
     skip: !userInfo,
   })
@@ -74,6 +77,17 @@ const Cart = () => {
     }
   }
 
+  if (!isAuthHydrated || isLoading) {
+    return (
+      <div className="cart-page-container">
+        <div className="cart-loading-state" role="status" aria-live="polite">
+          <div className="cart-loading-spinner" />
+          <p>Loading your cart…</p>
+        </div>
+      </div>
+    )
+  }
+
   if (!userInfo) {
     return (
       <div className="cart-page-container">
@@ -86,17 +100,6 @@ const Cart = () => {
               Sign in
             </Link>
           </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <div className="cart-page-container">
-        <div className="cart-loading-state" role="status" aria-live="polite">
-          <div className="cart-loading-spinner" />
-          <p>Loading your cart…</p>
         </div>
       </div>
     )

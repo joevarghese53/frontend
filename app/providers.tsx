@@ -5,7 +5,10 @@ import { Provider } from "react-redux"
 import { useDispatch } from "react-redux"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { makeStore, type AppStore } from "../redux/store"
-import { setCredentials } from "@/redux/state/auth/authSlice"
+import {
+  setAuthHydrated,
+  setCredentials,
+} from "@/redux/state/auth/authSlice"
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
@@ -45,6 +48,8 @@ function AuthHydrator() {
       } catch (storageError) {
         console.error("Could not clear invalid authentication state:", storageError)
       }
+    } finally {
+      dispatch(setAuthHydrated())
     }
   }, [dispatch])
 

@@ -4,8 +4,14 @@ export type UserInfo = Record<string, unknown> & {
   accessToken?: string
 }
 
-const initialState: { userInfo: UserInfo | null } = {
-  userInfo: null as null | Record<string, unknown>,
+type AuthState = {
+  userInfo: UserInfo | null
+  isHydrated: boolean
+}
+
+const initialState: AuthState = {
+  userInfo: null,
+  isHydrated: false,
 }
 
 const authSlice = createSlice({
@@ -14,6 +20,9 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action: PayloadAction<UserInfo>) => {
       state.userInfo = action.payload
+    },
+    setAuthHydrated: (state) => {
+      state.isHydrated = true
     },
     logout: (state) => {
       state.userInfo = null
@@ -25,5 +34,10 @@ const authSlice = createSlice({
   },
 })
 
-export const { setCredentials, logout, setAccessToken } = authSlice.actions
+export const {
+  setCredentials,
+  setAuthHydrated,
+  logout,
+  setAccessToken,
+} = authSlice.actions
 export default authSlice.reducer

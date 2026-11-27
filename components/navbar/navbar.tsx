@@ -16,7 +16,9 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
-  const { userInfo } = useSelector((state: RootState) => state.auth)
+  const { userInfo, isHydrated } = useSelector(
+    (state: RootState) => state.auth
+  )
 
   return (
     <nav className="fixed top-6 left-1/2 z-50 w-[90%] max-w-6xl -translate-x-1/2">
@@ -54,7 +56,9 @@ export default function Navbar() {
           ))}
         </div>
 
-        {userInfo ? (
+        {!isHydrated ? (
+          <span className="hidden h-9 w-32 md:block" aria-hidden="true" />
+        ) : userInfo ? (
           <div className="flex items-center gap-2">
             <AvatarWithUserDropDown />
             <Button
@@ -95,7 +99,7 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          {!userInfo && (
+          {isHydrated && !userInfo && (
             <Link
               href="/login"
               className="block text-lg"

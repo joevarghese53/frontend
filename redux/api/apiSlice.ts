@@ -10,8 +10,20 @@ import { BASE_URL, USERS_URL } from "../constants"
 import { logout, setAccessToken } from "../state/auth/authSlice"
 import { RootState } from "../store"
 
-type RefreshResponse = {
-  accessToken: string
+const refreshPromises = new WeakMap<object, Promise<string | null>>()
+
+function readAccessToken(value: unknown): string | null {
+  if (
+    typeof value === "object" &&
+    value !== null &&
+    "accessToken" in value &&
+    typeof value.accessToken === "string" &&
+    value.accessToken
+  ) {
+    return value.accessToken
+  }
+
+  return null
 }
 
 const baseQuery = fetchBaseQuery({
@@ -31,6 +43,8 @@ const baseQueryWithReauth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
+  const accessTokenAtRequestStart = (api.getState() as RootState).auth.userInfo
+    ?.accessToken
   let result = await baseQuery(args, api, extraOptions)
 
   // If access token expired (unauthorized)
@@ -51,39 +65,67 @@ const baseQueryWithReauth: BaseQueryFn<
       return result
     }
 
-    // Attempt refresh token
-    const refreshResult = await baseQuery(
-      {
-        url: `${USERS_URL}/refresh-token`,
-        method: "POST",
-      },
-      api,
-      extraOptions
-    )
+    const currentUserInfo = (api.getState() as RootState).auth.userInfo
+    if (!currentUserInfo) return result
 
-    const refreshData = refreshResult.data as RefreshResponse
+    const currentAccessToken = currentUserInfo.accessToken
+    if (currentAccessToken !== accessTokenAtRequestStart) {
+      if (currentAccessToken) {
+        result = await baseQuery(args, api, extraOptions)
+      }
+      return result
+    }
 
-    if (refreshData?.accessToken) {
-      // Store new access token in Redux
-      api.dispatch(setAccessToken(refreshData.accessToken))
+    let refreshPromise = refreshPromises.get(api.dispatch)
+    if (!refreshPromise) {
+      refreshPromise = (async () => {
+        const refreshResult = await baseQuery(
+          {
+            url: `${USERS_URL}/refresh-token`,
+            method: "POST",
+          },
+          api,
+          extraOptions
+        )
+        const accessToken = readAccessToken(refreshResult.data)
 
-      // Retry original request
-      result = await baseQuery(args, api, extraOptions)
-    } else {
-      // Refresh failed — logout user
+        if (accessToken) {
+          api.dispatch(setAccessToken(accessToken))
+          return accessToken
+        }
 
-      //Clear cookie by calling logout endpoint
-      await baseQuery(
-        {
-          url: `${USERS_URL}/logout`,
-          method: "POST",
-        },
-        api,
-        extraOptions
-      )
+        if (refreshResult.error?.status === 401) {
+          await baseQuery(
+            {
+              url: `${USERS_URL}/logout`,
+              method: "POST",
+            },
+            api,
+            extraOptions
+          )
+          api.dispatch(logout())
+        } else {
+          console.error(
+            "Could not refresh access token:",
+            refreshResult.error ?? "Refresh endpoint returned an invalid response."
+          )
+        }
 
-      //Clear redux state and local storage
-      api.dispatch(logout())
+        return null
+      })()
+      refreshPromises.set(api.dispatch, refreshPromise)
+    }
+
+    const activeRefreshPromise = refreshPromise
+    try {
+      const accessToken = await activeRefreshPromise
+      if (accessToken) {
+        result = await baseQuery(args, api, extraOptions)
+      }
+    } finally {
+      if (refreshPromises.get(api.dispatch) === activeRefreshPromise) {
+        refreshPromises.delete(api.dispatch)
+      }
     }
   }
 
