@@ -3,10 +3,11 @@
 import { useState } from "react"
 import Link from "next/link"
 import { motion } from "motion/react"
-import { Menu, X } from "lucide-react"
+import { Menu, ShoppingCart, X } from "lucide-react"
 import AvatarWithUserDropDown from "./avatarWithUserDropDown/avatarWithUserDropDown"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
+import { Button } from "@/components/ui/button"
 
 const links = [
   { name: "ORIGINALS", href: "/" },
@@ -54,7 +55,19 @@ export default function Navbar() {
         </div>
 
         {userInfo ? (
-          <AvatarWithUserDropDown />
+          <div className="flex items-center gap-2">
+            <AvatarWithUserDropDown />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-black"
+              asChild
+            >
+              <Link href="/cart" aria-label="Shopping cart">
+                <ShoppingCart aria-hidden="true" className="size-6" />
+              </Link>
+            </Button>
+          </div>
         ) : (
           <Link
             href="/login"
