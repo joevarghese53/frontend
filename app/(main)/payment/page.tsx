@@ -63,6 +63,7 @@ function PaymentContent() {
   const [pollStatus, setPollStatus] = useState("INITIATED")
   const [pollAttempts, setPollAttempts] = useState(0)
   const [isPaying, setIsPaying] = useState(false)
+  const paymentFlowActiveRef = useRef(false)
   const pollingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pollingActiveRef = useRef(false)
 
@@ -149,13 +150,22 @@ function PaymentContent() {
   }
 
   const handlePayment = async () => {
-    if (!orderDetails || isPaying || orderDetails.isPaid) return
+    if (
+      !orderDetails ||
+      paymentFlowActiveRef.current ||
+      pollingActiveRef.current ||
+      orderDetails.isPaid
+    ) {
+      return
+    }
+
     const phonePeCheckout = window.PhonePeCheckout
     if (!phonePeCheckout) {
       toast.error("Payment system is still loading. Please try again.")
       return
     }
 
+    paymentFlowActiveRef.current = true
     setIsPaying(true)
     try {
       const initRes = await initiatePayment({
@@ -174,20 +184,30 @@ function PaymentContent() {
         tokenUrl: initRes.redirectUrl,
         type: "IFRAME",
         callback: (result) => {
+          paymentFlowActiveRef.current = false
+          setIsPaying(false)
+
           if (result === "USER_CANCEL") {
             toast.info("Payment cancelled")
             return
           }
           if (result === "CONCLUDED") {
             pollPaymentStatus(initRes.merchantOrderId)
+            return
           }
+
+          toast.error("Payment could not be completed. Please try again.")
         },
       })
     } catch (paymentError) {
-      console.error("Payment initiation failed:", paymentError)
-      toast.error(getErrorMessage(paymentError))
-    } finally {
+      paymentFlowActiveRef.current = false
       setIsPaying(false)
+      console.error(
+        "Payment initiation failed:",
+        getErrorMessage(paymentError),
+        paymentError
+      )
+      toast.error(getErrorMessage(paymentError))
     }
   }
 
@@ -267,7 +287,7 @@ function PaymentContent() {
             {orderDetails.isPaid
               ? "Paid"
               : isPaying
-                ? "Opening payment…"
+                ? "Payment in progress…"
                 : "Pay Now"}
           </button>
         </aside>
@@ -284,7 +304,7 @@ function PaymentContent() {
           {orderDetails.isPaid
             ? "Paid"
             : isPaying
-              ? "Opening…"
+              ? "Payment in progress…"
               : "Pay Now"}
         </button>
       </div>
